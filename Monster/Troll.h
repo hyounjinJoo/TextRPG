@@ -4,7 +4,7 @@
 class Troll : public Monster
 {
 public:
-    Troll();
+    Troll(int level);
     virtual ~Troll();
 
 public:
