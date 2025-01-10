@@ -28,16 +28,16 @@ GameManager::Monster* GameManager::GenerateMonster(int Level)
 	switch (RandNumber)
 	{
 	case 0:
-		CreatedMonster = new Orc(level);
+		CreatedMonster = new Orc(Level);
 		break;
 	case 1:
-		CreatedMonster = new Troll(level);
+		CreatedMonster = new Troll(Level);
 		break;
 	case 2:
-		CreatedMonster = new Goblin(level);
+		CreatedMonster = new Goblin(Level);
 		break;
 	default:
-		CreatedMonster = new Orc(level);
+		CreatedMonster = new Orc(Level);
 		break;
 	}
 
@@ -46,7 +46,7 @@ GameManager::Monster* GameManager::GenerateMonster(int Level)
 
 GameManager::BossMonster* GameManager::GenerateBossMonster(int Level)
 { 
-    
+	
 }
 
 void GameManager::Battle(Character* Player)
