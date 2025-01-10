@@ -46,7 +46,7 @@ GameManager::Monster* GameManager::GenerateMonster(int Level)
 
 GameManager::BossMonster* GameManager::GenerateBossMonster(int Level)
 { 
-	
+	return new BossMonster(Level);
 }
 
 void GameManager::Battle(Character* Player)
