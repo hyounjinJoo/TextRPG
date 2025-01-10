@@ -34,6 +34,14 @@ public:
     void LevelUp();
     void UseItem(int Index);
     void VisitShop();
+    int GetGold() 
+    {
+        return Instance->Gold;
+    }
+    void SetGold(int InputGold) 
+    {
+        Instance->Gold = InputGold;
+    }
 
 private:
     std::string Name;
