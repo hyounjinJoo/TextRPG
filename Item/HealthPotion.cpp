@@ -8,10 +8,17 @@ HealthPotion::~HealthPotion()
 {
 }
 
-std::string HealthPotion::GetName()
+std::string HealthPotion::GetName() const
 {
+    return Name;
+}
 
-    return std::string();
+std::string HealthPotion::GetItemDescription() const
+{
+    std::string StrItemDescription = "";
+    StrItemDescription = Name + " : " + std::to_string(HealthRestore);
+
+    return StrItemDescription;
 }
 
 void HealthPotion::Use(Character* Player)

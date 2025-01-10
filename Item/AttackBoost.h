@@ -8,7 +8,8 @@ public:
     virtual ~AttackBoost();
     
 public:
-    std::string GetName() override;
+    std::string GetName() const override;
+    std::string GetItemDescription() const override;
     void Use(Character* Player) override;
 
 private:
