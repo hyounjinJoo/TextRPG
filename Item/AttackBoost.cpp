@@ -2,6 +2,8 @@
 
 AttackBoost::AttackBoost()
 {
+    Name = "공격력 포션";
+    AttackIncrease = 10;
 }
 
 AttackBoost::~AttackBoost()
@@ -23,4 +25,9 @@ std::string AttackBoost::GetItemDescription() const
 
 void AttackBoost::Use(Character* Player)
 {
+    int AfterDamage = Player->GetAttack() + AttackIncrease;
+    Player->SetAttack(AfterDamage);
+
+    std::cout << Name << "을(를) 사용 했습니다." << std::endl;
+    std::cout << Player->GetName() << "의 현재 공격력 : " << Player->GetAttack() << std::endl;
 }

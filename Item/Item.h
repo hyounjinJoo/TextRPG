@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <string>
+#include <iostream>
 #include "../Player/Character.h"
 
 class Character;
