@@ -21,7 +21,27 @@ void GameManager::Init()
 
 GameManager::Monster* GameManager::GenerateMonster(int Level)
 {
+	const int MonsterCount = 3;
+	int RandNumber = rand() % MonsterCount;
 
+	Monster* CreatedMonster = nullptr;
+	switch (RandNumber)
+	{
+	case 0:
+		CreatedMonster = new Orc(level);
+		break;
+	case 1:
+		CreatedMonster = new Troll(level);
+		break;
+	case 2:
+		CreatedMonster = new Goblin(level);
+		break;
+	default:
+		CreatedMonster = new Orc(level);
+		break;
+	}
+
+	return CreatedMonster;
 }
 
 GameManager::BossMonster* GameManager::GenerateBossMonster(int Level)
