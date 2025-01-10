@@ -16,6 +16,7 @@ void Shop::DisplayItems()
 {
 
 	std::cout << "Test" << std::endl;
+	std::cout << "Test" << std::endl;
 }
 
 void Shop::BuyItem(int Index, Character* Player)
