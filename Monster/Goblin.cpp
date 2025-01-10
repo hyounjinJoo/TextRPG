@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Goblin::Goblin(int level) : Name("고블린"), Health(0), Attack(0)
+Goblin::Goblin(int Level) : Name("고블린"), Health(0), Attack(0)
 {
     // 고블린의 체력과 공격력을 설정 중입니다.
     // Character* character = Character::GetInstance();

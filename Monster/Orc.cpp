@@ -1,6 +1,6 @@
 ﻿#include "Orc.h"
 
-Orc::Orc(int level)
+Orc::Orc(int Level)
 {
 }
 

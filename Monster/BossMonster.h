@@ -4,7 +4,7 @@
 class BossMonster : public Monster
 {
 public:
-    BossMonster(int level);
+    BossMonster(int Level);
     virtual ~BossMonster();
     
 public:

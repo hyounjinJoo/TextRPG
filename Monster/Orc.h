@@ -4,7 +4,7 @@
 class Orc : public Monster
 {
 public:
-    Orc(int level);
+    Orc(int Level);
     virtual ~Orc();
 
 public:

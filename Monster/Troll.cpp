@@ -1,6 +1,6 @@
 ﻿#include "Troll.h"
 
-Troll::Troll(int level)
+Troll::Troll(int Level)
 {
 }
 

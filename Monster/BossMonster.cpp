@@ -1,6 +1,6 @@
 ﻿#include "BossMonster.h"
 
-BossMonster::BossMonster(int level)
+BossMonster::BossMonster(int Level)
 {
 }
 
