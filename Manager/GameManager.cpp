@@ -97,6 +97,9 @@ void GameManager::InitBattle(Character* Player)
 	}
 
 	BattlePlayer = Player;
+
+	// 플레이어 턴 초기화
+	BattleTurn = EBattleTurn::PlayerTurn;
 }
 
 void GameManager::StartBattle()
@@ -129,6 +132,7 @@ void GameManager::PlayTurn()
 	}
 }
 
+// 전투 처리와 화면 출력을 분리하고픈 마음에 턴 별 데이터를 저장합니다
 void GameManager::SaveTurn()
 {
 
