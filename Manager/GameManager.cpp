@@ -36,7 +36,6 @@ Monster* GameManager::GenerateMonster(int Level)
 		CreatedMonster = new Goblin(Level);
 		break;
 	default:
-		CreatedMonster = new Orc(Level);
 		break;
 	}
 
@@ -62,5 +61,3 @@ void GameManager::DisplayInventory(Character* Player)
 {
 
 }
-
-
