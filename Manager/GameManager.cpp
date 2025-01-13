@@ -101,11 +101,31 @@ void GameManager::InitBattle(Character* Player)
 
 void GameManager::StartBattle()
 {
-
+	while (BattleTurn != EBattleTurn::End)
+	{
+		PlayTurn();
+		SaveTurn();
+		NextTurn();
+	}
 }
 
 void GameManager::EndBattle()
 {
+}
+
+void GameManager::PlayTurn()
+{
+
+}
+
+void GameManager::SaveTurn()
+{
+
+}
+
+void GameManager::NextTurn()
+{
+
 }
 
 Monster* GameManager::CreateBattleMonster(int PlayerLevel)

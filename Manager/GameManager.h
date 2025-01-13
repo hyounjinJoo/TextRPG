@@ -1,5 +1,15 @@
 ﻿#pragma once
 
+namespace
+{
+	enum EBattleTurn
+	{
+		PlayerTurn,
+		MonsterTurn,
+		End,
+	};
+};
+
 class Monster;
 class BossMonster;
 class Character;
@@ -25,10 +35,15 @@ private:
 	void InitBattle(Character* Player);
 	void StartBattle();
 	void EndBattle();
+	void PlayTurn();
+	void SaveTurn();
+	void NextTurn();
 
 	Monster* CreateBattleMonster(int PlayerLevel);
 
 private:
     Character* BattlePlayer;
     Monster* BattleMonster;
+
+	EBattleTurn BattleTurn;
 };
