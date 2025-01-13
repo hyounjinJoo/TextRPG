@@ -134,8 +134,17 @@ void Shop::DisplaySellMenu(Character* Player)
 
 void Shop::BuyItem(int Index, Character* Player)
 {
-	//중복확인
+	std::vector<Item*>& Inventory = Player->GetInventory();
 
+	// 중복 확인: 인벤토리 순회하며 동일 아이템이 있는지 검사
+	for (Item* item : Inventory)
+	{
+		if (item == AvailableItems[Index]) // 동일 아이템인지 비교
+		{
+			std::cout << "| 이미 이 아이템을 보유하고 있습니다. 구매할 수 없습니다!\n";
+			return;
+		}
+	}
 	//골드 부족 확인
 	if (Player->GetGold() < ItemPrices[Index])
 	{
