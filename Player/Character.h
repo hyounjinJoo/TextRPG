@@ -112,5 +112,5 @@ private:
     int Attack;
     int Experience;
     int Gold;
-    std::vector<Item*> Inventory; 
+    std::vector<Item*> Inventory;
 };
