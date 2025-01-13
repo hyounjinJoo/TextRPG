@@ -115,7 +115,18 @@ void GameManager::EndBattle()
 
 void GameManager::PlayTurn()
 {
-
+	switch (BattleTurn)
+	{
+	case EBattleTurn::PlayerTurn:
+		TryUsePotion();
+		TargetAttack(BattlePlayer, BattleMonster);
+		break;
+	case EBattleTurn::MonsterTurn:
+		TargetAttack(BattleMonster, BattlePlayer);
+		break;
+	default:
+		break;
+	}
 }
 
 void GameManager::SaveTurn()
@@ -141,6 +152,25 @@ Monster* GameManager::CreateBattleMonster(int PlayerLevel)
 	}
 
 	return CreatedMonster;
+}
+
+/* TODO: 전투 중 포션 사용 */
+void GameManager::TryUsePotion()
+{
+
+}
+
+void GameManager::TargetAttack(Character* Attacker, Monster* Defender)
+{
+	// 플레이어 공격, 몬스터의 HP를 수정합니다
+	Defender->TakeDamage(Attacker->GetAttack());
+}
+
+void GameManager::TargetAttack(Monster* Attacker, Character* Defender)
+{
+	// 몬스터 공격, 플레이어의 HP를 수정합니다
+	int CurrentHealth = std::max(0, Defender->GetHealth() - Attacker->GetAttack());
+	Defender->SetHealth(CurrentHealth);
 }
 
 void GameManager::VisitShop(Character* Player)

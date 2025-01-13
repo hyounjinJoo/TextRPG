@@ -41,6 +41,10 @@ private:
 
 	Monster* CreateBattleMonster(int PlayerLevel);
 
+	void TryUsePotion();
+	void TargetAttack(Monster* Attacker, Character* Defender);
+	void TargetAttack(Character* Attacker, Monster* Defender);
+
 private:
     Character* BattlePlayer;
     Monster* BattleMonster;
