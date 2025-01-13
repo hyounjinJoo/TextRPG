@@ -69,7 +69,18 @@ void GameManager::Battle(Character* Player)
 
 bool GameManager::CanBattle()
 {
-	return false;
+	if (BattleMonster == nullptr)
+	{
+		std::cout << "배틀 몬스터가 존재하지 않습니다!" << std::endl;
+		return false;
+	}
+	if (BattlePlayer == nullptr)
+	{
+		std::cout << "현재 배틀에 참여한 플레이어가 없습니다!" << std::endl;
+		return false;
+	}
+
+	return true;
 }
 
 void GameManager::InitBattle(Character* Player)
