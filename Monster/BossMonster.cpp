@@ -7,13 +7,13 @@
 
 using namespace std;
 
-BossMonster::BossMonster(int Level) : Name("투명드래곤") // 투명드래곤 : 드래곤중에서도 최강의 투명드래곤이 울부짓었다. 투명드래곤은 졸라짱쎄서 드래곤중에서 최강이엇다
+BossMonster::BossMonster(int Level) : Name("투명드래곤") // 투명드래곤 : 드래곤중에서도 최강의 투명드래곤이 울부짓었다. 투명드래곤은 졸라짱쎄서 드래곤중에서 최강이엇다.
 {
     // 레벨에 따라 체력과 공격력을 랜덤하게 설정.
     random_device R;
     mt19937 Gen(R());
-    uniform_int_distribution<int> DistHealth(30, 45); // 
-    uniform_int_distribution<int> DistAttack(7.5, 15);
+    uniform_int_distribution<int> DistHealth(30, 45); // 보스 몬스터의 체력은 기존 몬스터의 1.5배 범위를 랜덤으로 설정.
+    uniform_int_distribution<int> DistAttack(7.5, 15); // 보스 몬스터의 공격력은 기존 몬스터의 1.5배 범위를 랜덤으로 설정.
     int RandomHealth = DistHealth(Gen);
     int RandomAttack = DistAttack(Gen);
 
