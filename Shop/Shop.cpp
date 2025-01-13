@@ -27,23 +27,11 @@ void Shop::DisplayItems(Character* Player)
 	while (true)
 	{
 		std::cout << "\n====== 상점에 오신걸 환영합니다! ======\n";
-		std::cout << "\n====== 소지하고 있는 아이템 목록 ======\n";
-		for (int i = 0; i < AvailableItems.size(); i++)
-		{
-			Item* item = AvailableItems[i];
-			std::cout << std::setw(2) << i + 1 << ". "
-				<< item->GetName()
-				<< " - "
-				<< item->GetItemDescription();
-		}
-		std::cout << "============================\n";
-		std::cout << "소지금: " << Player->GetGold() << " Gold\n";
-
-		std::cout << "\n 행동을 선택해주세요: \n";
-		std::cout << "1. 아이템 구매 \n";
-		std::cout << "2. 아이템 판매 \n";
-		std::cout << "3. 상점 나가기 \n";
-		std::cout << "어떤 행동을 하시겠습니까?:  \n";
+		std::cout << "\n | 행동을 선택해주세요: \n";
+		std::cout << "| 1. 아이템 구매 \n";
+		std::cout << "| 2. 아이템 판매 \n";
+		std::cout << "| 골드: " << Player->GetGold() << "\n";
+		std::cout << "| 어떤 행동을 하시겠습니까?:  \n";
 
 		int Choice;
 		std::cin >> Choice;
@@ -52,19 +40,17 @@ void Shop::DisplayItems(Character* Player)
 		{
 		case 1:
 			DisplayBuyMenu(Player); //아이템 구매
-			return; //밸런스 패치로 인한 구매제한
+			return; //구매 후 상점에서 나가기
 		case 2:
 			DisplaySellMenu(Player); //아이템 판매
 			break;
-		case 3:
-			std::cout << "상점을 방문해주셔서 감사합니다! \n";
-			return;
 		default:
-		std::cout << "잘못 선택하셨습니다. 다시 선택해주세요. \n";
+		std::cout << "| 다시 어떤 행동을 할지 선택하세요! \n";
 			break;
 		}
 	}
 }
+
 void Shop::DisplayBuyMenu(Character* Player)
 {
 	while (true)
@@ -73,56 +59,88 @@ void Shop::DisplayBuyMenu(Character* Player)
 		for (int i = 0; i < AvailableItems.size(); i++)
 		{
 			Item* item = AvailableItems[i];
-			std::cout << std::setw(2) << i + 1 << ". "
+			std::cout <<"| " << std::setw(2) << i + 1 << ". "
 				<< item->GetName()
-				<< " - "
+				<< " ("
 				<< item->GetItemDescription()
-				<< " ( " << ItemPrices[i] << " Gold)";
+				<< ") "
+				<< ": " << ItemPrices[i] << " 골드)";
 
 		}
-		std::cout << "소지금: " << Player->GetGold() << " Gold\n";
+		std::cout << "| 현재 보유 골드: " << Player->GetGold() ;
 
-		std::cout << "0. 상점메뉴로 돌아가기\n";
-		std::cout << "구매할 아이템 번호 입력: ";
+		std::cout << "| 구매할 아이템 번호 입력: ";
 
 		int ItemIndex;
 		std::cin >> ItemIndex;
 
-		if (ItemIndex == 0)
+		
+		// 1,2 외의 숫자를 눌렀을시 오류 메시지
+		if (ItemIndex < 1 || ItemIndex > AvailableItems.size()) 
 		{
-			return; // 상점 메뉴로 돌아가기
+			std::cout << "| 다시 어떤 아이템을 구매할 지 선택하세요!\n";
+			continue;
 		}
-		// 1,2,0 외의 숫자를 눌렀을시 오류 메시지
-		else if (ItemIndex < 1 || ItemIndex > AvailableItems.size()) 
-		{
-			std::cout << "잘못 입력하였습니다. 다시 입력해주세요.\n";
-		}
-		else
-		{
-			// 아이템 구매 처리
-			if (Player->GetGold() >= ItemPrices[ItemIndex - 1])
-			{
-				BuyItem(ItemIndex - 1, Player); // 구매 로직 호출
-				std::cout << AvailableItems[ItemIndex - 1]->GetName()
-					<< " 아이템을 구매하셨습니다!\n";
-			}
-			else
-			{
-				std::cout << "소지금이 부족합니다. 아이템을 구매할 수 없습니다.\n";
-			}
-		}
+		BuyItem(ItemIndex - 1, Player);
+		return; // 아이템 한번 구매 후 상점에서 나가기(밸런스 패치)
+		
 	}
 }
 
 void Shop::DisplaySellMenu(Character* Player)
 {	
-	
+	const std::vector<Item*>& Inventory = Player->GetInventory();
+
+	if (Inventory.empty())
+	{
+		std::cout << "\n| 현재 아이템이 없습니다!\n";
+		return;
+	}
+	while (true)
+	{
+		std::cout << "\n====== 판매 가능한 아이템 목록 ======\n";
+		for (int i = 0; i < Inventory.size(); i++)
+		{
+			Item* item = Inventory[i];
+			std::cout << std::setw(2) << i + 1 << ". "
+						<< item->GetName()
+						<< " - "
+						<< item->GetItemDescription()
+						<< " (판매 가격: " << ItemPrices[i] * 0.6 << " Gold)\n";
+		}
+		std::cout << "| 판매할 아이템 번호 입력: \n";
+
+		int ItemIndex;
+		std::cin >> ItemIndex;
+
+		if (ItemIndex < 1 || ItemIndex > Inventory.size())
+		{
+			std::cout << "| 다시 어떤 아이템을 팔지 선택해주세요!\n";
+			continue;
+		}
+
+			SellItem(ItemIndex - 1, Player);
+			break;
+
+	}
 }
 
 void Shop::BuyItem(int Index, Character* Player)
 {
+	if (Player->GetGold() < ItemPrices[Index])
+	{
+		std::cout << "| 구매에 실패했습니다! 골드가 부족합니다! \n";
+		return;
+	}
+	Player->SetGold(Player->GetGold() - ItemPrices[Index]);
+	Player->GetInventory().push_back(AvailableItems[Index]);
+
+	std::cout << "| " << AvailableItems[Index]->GetName() << " 아이템을(를) 구매했습니다!\n";
+	std::cout << "| 남은 골드: " << Player->GetGold() << " 골드\n";
+	std::cout << "| 상점 이용을 종료합니다. \n";
 }
 
 void Shop::SellItem(int Index, Character* Player)
 {
+
 }
