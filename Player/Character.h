@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include <string>
+#include <iostream>
 #include <vector>
+#include <map>
+#include "../Item/Item.h"
 
 class Item;
 
@@ -32,9 +35,75 @@ private:
 public:
     void DisplayStatus();
     void LevelUp();
+    void GetExperience(int AddExperience);
     void UseItem(int Index);
-    void VisitShop();
 
+    std::string GetName() 
+    {
+        return Instance->Name;
+    }
+    void SetName(std::string InputName) 
+    {
+        Instance->Name = InputName;
+    }
+
+    const int GetLevel() 
+    {
+        return Instance->Level;
+    }
+    void SetLevel(int InputLevel) 
+    {
+        Instance->Level = InputLevel;
+    }
+
+    int GetHealth() 
+    {
+        return Instance->Health;
+    }
+    void SetHealth(int InputHealth) 
+    {
+        Instance->Health = InputHealth;
+    }
+
+    const int GetMaxHealth() 
+    {
+        return Instance->MaxHealth;
+    }
+    void SetMaxHealth(int InputMaxHealth) {
+        Instance->MaxHealth = InputMaxHealth;
+    }
+
+    int GetAttack() 
+    {
+        return Instance->Attack;
+    }
+    void SetAttack(int InputAttack)
+    {
+        Instance->Attack = InputAttack;
+    }
+
+    int GetExperience() 
+    {
+        return Instance->Experience;
+    }
+    void SetExperience(int InputExperience) 
+    {
+        Instance->Experience = InputExperience;
+    }
+
+    int GetGold() 
+    {
+        return Instance->Gold;
+    }
+    void SetGold(int InputGold) 
+    {
+        Instance->Gold = InputGold;
+    }
+
+    std::vector<Item*> GetInventory() 
+    {
+        return Instance->Inventory;
+    }
 private:
     std::string Name;
     int Level;
@@ -43,5 +112,5 @@ private:
     int Attack;
     int Experience;
     int Gold;
-    std::vector<Item*> Inventory; 
+    std::vector<Item*> Inventory;
 };
