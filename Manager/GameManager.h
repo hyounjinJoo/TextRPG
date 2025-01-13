@@ -19,4 +19,10 @@ public:
 
 private:
     void Init();
+
+/* 전투 관련 */
+	bool CanBattle();
+	void InitBattle(Character* Player);
+	void StartBattle();
+	void EndBattle();
 };

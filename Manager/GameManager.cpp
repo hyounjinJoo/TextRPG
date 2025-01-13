@@ -54,8 +54,32 @@ BossMonster* GameManager::GenerateBossMonster(int Level)
 
 void GameManager::Battle(Character* Player)
 {
+	InitBattle(Player);
 
+	if (CanBattle() == false)
+		return;
+
+	StartBattle();
+	EndBattle();
 }
+
+bool GameManager::CanBattle()
+{
+	return false;
+}
+
+void GameManager::InitBattle(Character* Player)
+{
+}
+
+void GameManager::StartBattle()
+{
+}
+
+void GameManager::EndBattle()
+{
+}
+
 
 void GameManager::VisitShop(Character* Player)
 {
