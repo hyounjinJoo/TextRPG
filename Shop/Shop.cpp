@@ -1,7 +1,6 @@
 ﻿#include "Shop.h"
 
 #include <iostream>
-#include <iomanip>
 #include "../Player/Character.h"
 #include "../Item/HealthPotion.h" 
 #include "../Item/AttackBoost.h" 
@@ -45,7 +44,7 @@ void Shop::DisplayItems(Character* Player)
 		case 2:
 			DisplaySellMenu(Player); //아이템 판매
 			break;
-		case3:
+		case 3:
 			std::cout<<"| 상점 이용을 종료합니다.\n";
 				return;
 		default:
@@ -63,7 +62,7 @@ void Shop::DisplayBuyMenu(Character* Player)
 		for (int i = 0; i < AvailableItems.size(); i++)
 		{
 			Item* item = AvailableItems[i];
-			std::cout <<"| " << std::setw(2) << i + 1 << ". "
+			std::cout <<"| "  << i + 1 << ". "
 				<< item->GetName()
 				<< " ("
 				<< item->GetItemDescription()
@@ -80,9 +79,9 @@ void Shop::DisplayBuyMenu(Character* Player)
 
 		
 		// 1,2 외의 숫자를 눌렀을시 오류 메시지
-		if (ItemIndex < 1) 
+		if (ItemIndex == 0) 
 		{
-
+			return;
 		}
 		else if (ItemIndex < 1 || ItemIndex > AvailableItems.size()) 
 		{
@@ -110,7 +109,7 @@ void Shop::DisplaySellMenu(Character* Player)
 		for (int i = 0; i < Inventory.size(); i++)
 		{
 			Item* item = Inventory[i];
-			std::cout << std::setw(2) << i + 1 << ". "
+			std::cout << "| " << i + 1 << ". "
 						<< item->GetName()
 						<< " - "
 						<< item->GetItemDescription()
@@ -135,19 +134,22 @@ void Shop::DisplaySellMenu(Character* Player)
 
 void Shop::BuyItem(int Index, Character* Player)
 {
-	Item* itemToBuy = AvailableItems[Index];
-	
+	//중복확인
+
+	//골드 부족 확인
 	if (Player->GetGold() < ItemPrices[Index])
 	{
 		std::cout << "| 구매에 실패했습니다! 골드가 부족합니다! \n";
 		return;
 	}
+
+	// 골드 차감 및 인벤토리에 추가
 	Player->SetGold(Player->GetGold() - ItemPrices[Index]);
 	Player->GetInventory().push_back(AvailableItems[Index]);
 
 	std::cout << "| " << AvailableItems[Index]->GetName() << " 아이템을(를) 구매했습니다!\n";
 	std::cout << "| 남은 골드: " << Player->GetGold() << " 골드\n";
-	std::cout << "| 상점 이용을 종료합니다. \n";
+	std::cout << "| 상점 메뉴로 돌아갑니다. \n";
 }
 
 void Shop::SellItem(int Index, Character* Player)
