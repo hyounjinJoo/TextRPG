@@ -39,17 +39,17 @@ Monster* GameManager::GenerateMonster(int Level)
 	Monster* CreatedMonster = nullptr;
 	switch (RandNumber)
 	{
-	case 0:
-		CreatedMonster = new Orc(Level);
-		break;
-	case 1:
-		CreatedMonster = new Troll(Level);
-		break;
-	case 2:
-		CreatedMonster = new Goblin(Level);
-		break;
-	default:
-		break;
+		case 0:
+			CreatedMonster = new Orc(Level);
+			break;
+		case 1:
+			CreatedMonster = new Troll(Level);
+			break;
+		case 2:
+			CreatedMonster = new Goblin(Level);
+			break;
+		default:
+			break;
 	}
 
 	return CreatedMonster;
@@ -98,9 +98,9 @@ void GameManager::InitBattle(Character* Player)
 	if (Player)
 	{
 		BattleMonster = CreateBattleMonster(Player->GetLevel());
+		// 플레이어가 유효할 경우 배틀 플레이어를 설정합니다.
+		BattlePlayer = Player;
 	}
-
-	BattlePlayer = Player;
 
 	// 플레이어 턴 초기화
 	BattleTurn = EBattleTurn::PlayerTurn;
