@@ -8,6 +8,7 @@
 #include <time.h>
 
 GameManager::GameManager()
+: BattlePlayer(nullptr), BattleMonster(nullptr)
 {
     Init();
 }
@@ -70,16 +71,43 @@ bool GameManager::CanBattle()
 
 void GameManager::InitBattle(Character* Player)
 {
+	if (BattleMonster)
+	{
+		delete BattleMonster;
+		BattleMonster = nullptr;
+	}
+
+	if (Player)
+	{
+		BattleMonster = CreateBattleMonster(Player->GetLevel());
+	}
+
+	BattlePlayer = Player;
 }
 
 void GameManager::StartBattle()
 {
+
 }
 
 void GameManager::EndBattle()
 {
 }
 
+Monster* GameManager::CreateBattleMonster(int PlayerLevel)
+{
+	Monster* CreatedMonster = nullptr;
+	if (PlayerLevel >= 10)
+	{
+		CreatedMonster = GenerateBossMonster(PlayerLevel);
+	}
+	else
+	{
+		CreatedMonster = GenerateMonster(PlayerLevel);
+	}
+
+	return CreatedMonster;
+}
 
 void GameManager::VisitShop(Character* Player)
 {

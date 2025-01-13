@@ -25,4 +25,10 @@ private:
 	void InitBattle(Character* Player);
 	void StartBattle();
 	void EndBattle();
+
+	Monster* CreateBattleMonster(int PlayerLevel);
+
+private:
+    Character* BattlePlayer;
+    Monster* BattleMonster;
 };
