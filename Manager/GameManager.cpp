@@ -149,9 +149,26 @@ void GameManager::SaveTurn()
 	BattleTurnInfos.push_back(TurnInfo);
 }
 
+// 다음 배틀턴을 설정합니다.
 void GameManager::NextTurn()
 {
-
+	// 몬스터 체력이 없을 경우, 플레이어 승리 및 턴 종료 
+	if (BattleMonster->GetHealth() <= 0)
+	{
+		BattleResult = EBattleResult::PlayerWin;
+		BattleTurn = EBattleTurn::End;
+	}
+	// 플레이어 체력이 없을 경우, 몬스터 승리 및 턴 종료 
+	else if (BattlePlayer->GetHealth() <= 0)
+	{
+		BattleResult = EBattleResult::MonsterWin;
+		BattleTurn = EBattleTurn::End;
+	}
+	else
+	{
+		// 승자가 없을 경우 다음 턴을 계산합니다. (PlayerTurn -> MonsterTurn, MonsterTurn -> PlayerTurn)
+		BattleTurn = static_cast<EBattleTurn>((static_cast<int>(BattleTurn) + 1) % static_cast<int>(EBattleTurn::End));
+	}
 }
 
 Monster* GameManager::CreateBattleMonster(int PlayerLevel)

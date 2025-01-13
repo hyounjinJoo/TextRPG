@@ -3,6 +3,12 @@
 
 namespace
 {
+	enum EBattleResult
+	{
+		PlayerWin,
+		MonsterWin, 
+	};
+
 	enum EBattleTurn
 	{
 		PlayerTurn,
@@ -60,5 +66,6 @@ private:
     Monster* BattleMonster;
 
 	EBattleTurn BattleTurn;
+	EBattleResult BattleResult;
 	std::vector<FBattleTurnInfo> BattleTurnInfos;
 };
