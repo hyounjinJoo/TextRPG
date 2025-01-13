@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <vector>
+
 namespace
 {
 	enum EBattleTurn
@@ -7,7 +9,16 @@ namespace
 		MonsterTurn,
 		End,
 	};
-};
+
+	struct FBattleTurnInfo
+	{
+		int MonsterHP;
+		int MonsterAttack;
+		int PlayerHP;
+		int PlayerAttack;
+		EBattleTurn BattleTurn;
+	};
+}
 
 class Monster;
 class BossMonster;
@@ -49,4 +60,5 @@ private:
     Monster* BattleMonster;
 
 	EBattleTurn BattleTurn;
+	std::vector<FBattleTurnInfo> BattleTurnInfos;
 };

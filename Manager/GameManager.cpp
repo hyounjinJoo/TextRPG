@@ -19,6 +19,8 @@ GameManager::~GameManager()
 	{
 		delete BattleMonster;
 	}
+
+	BattleTurnInfos.clear();
 }
 
 void GameManager::Init()
@@ -100,6 +102,7 @@ void GameManager::InitBattle(Character* Player)
 
 	// 플레이어 턴 초기화
 	BattleTurn = EBattleTurn::PlayerTurn;
+	BattleTurnInfos.clear();
 }
 
 void GameManager::StartBattle()
@@ -132,10 +135,18 @@ void GameManager::PlayTurn()
 	}
 }
 
-// 전투 처리와 화면 출력을 분리하고픈 마음에 턴 별 데이터를 저장합니다
+// 전투 처리와 화면 출력을 분리하고픈 마음에 턴별 데이터를 저장합니다
 void GameManager::SaveTurn()
 {
+	// 화면 출력에 필요한 데이터를 저장합니다.
+	FBattleTurnInfo TurnInfo;
+	TurnInfo.MonsterHP = BattleMonster->GetHealth();
+	TurnInfo.MonsterAttack = BattleMonster->GetAttack();
+	TurnInfo.PlayerHP = BattlePlayer->GetHealth();
+	TurnInfo.PlayerAttack = BattlePlayer->GetAttack();
+	TurnInfo.BattleTurn = BattleTurn;
 
+	BattleTurnInfos.push_back(TurnInfo);
 }
 
 void GameManager::NextTurn()
