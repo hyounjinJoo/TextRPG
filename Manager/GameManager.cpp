@@ -107,6 +107,9 @@ void GameManager::InitBattle(Character* Player)
 
 void GameManager::StartBattle()
 {
+	// 배틀 시작 시, 초기 플레이어와 몬스터의 정보를 저장합니다.
+	SaveTurn();
+
 	while (BattleTurn != EBattleTurn::End)
 	{
 		PlayTurn();
@@ -117,6 +120,8 @@ void GameManager::StartBattle()
 
 void GameManager::EndBattle()
 {
+	// 배틀 종료 후, 턴별 배틀 정보를 출력합니다.
+	DisplayBattleInfos();
 }
 
 void GameManager::PlayTurn()
@@ -196,6 +201,62 @@ void GameManager::TargetAttack(Character* Attacker, Monster* Defender)
 {
 	// 플레이어 공격, 몬스터의 HP를 수정합니다
 	Defender->TakeDamage(Attacker->GetAttack());
+}
+
+void GameManager::DisplayBattleInfos()
+{
+	// 턴 정보를 화면에 출력하기 위해 최소 2개가 필요합니다.
+	// [0] 배틀 시작시 초기 플레이어와 몬스터 정보
+	// [1] 배틀 시작후 1턴 이상의 전투 정보
+	static const int MIN_TURN_IDX = 2;
+
+ 	if (BattleTurnInfos.size() <= MIN_TURN_IDX)
+		return;
+
+	for (int TurnIdx = 1; TurnIdx < BattleTurnInfos.size(); ++TurnIdx)
+	{
+		FBattleTurnInfo& PrevInfo = BattleTurnInfos[TurnIdx - 1];
+		FBattleTurnInfo& CurInfo = BattleTurnInfos[TurnIdx];
+
+		DisplayBattleInfo(PrevInfo, CurInfo, TurnIdx);
+	}
+}
+
+
+void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBattleTurnInfo& CurInfo, int TurnIdx)
+{
+	// 첫 턴에는 몬스터의 정보를 출력합니다.
+	if (TurnIdx == 1)
+	{
+		std::cout << "몬스터" << BattlePlayer->GetName() << " 등장! 체력: " << PrevInfo.MonsterHP << ", 공격력: " << PrevInfo.MonsterAttack << std::endl;
+		return;
+	}
+
+	switch (CurInfo.BattleTurn)
+	{
+		case EBattleTurn::PlayerTurn:
+			if (CurInfo.MonsterHP > 0)
+			{
+				std::cout << "" << BattlePlayer->GetName() << "이(가) " << BattleMonster->GetName() << "을(를) 공격합니다! " << BattleMonster->GetName() << " 체력: " << CurInfo.MonsterHP << std::endl;
+			}
+			else
+				{
+			std::cout << "" << BattlePlayer->GetName() << "이(가) " << BattleMonster->GetName() << "을(를) 공격합니다! " << BattleMonster->GetName() << " 처치!" << std::endl;
+			}
+			break;
+		case EBattleTurn::MonsterTurn:
+			if (CurInfo.PlayerHP > 0)
+			{
+				std::cout << "" << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다!" << BattlePlayer->GetName() << "체력: " << CurInfo.PlayerHP << " / " << BattlePlayer->GetMaxHealth() << std::endl;
+			}
+			else
+				{
+			std::cout << "" << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다!" << BattlePlayer->GetName() << "체력: " << PrevInfo.PlayerHP << "->" << CurInfo.PlayerHP << std::endl;
+			}
+			break;
+		default:
+			break;
+	}
 }
 
 void GameManager::TargetAttack(Monster* Attacker, Character* Defender)

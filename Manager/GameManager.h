@@ -61,6 +61,9 @@ private:
 	void TargetAttack(Monster* Attacker, Character* Defender);
 	void TargetAttack(Character* Attacker, Monster* Defender);
 
+	void DisplayBattleInfos();
+	void DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBattleTurnInfo& CurInfo, int TurnIdx);
+
 private:
     Character* BattlePlayer;
     Monster* BattleMonster;
