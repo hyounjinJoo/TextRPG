@@ -30,6 +30,7 @@ void Shop::DisplayItems(Character* Player)
 		std::cout << "\n | 행동을 선택해주세요: \n";
 		std::cout << "| 1. 아이템 구매 \n";
 		std::cout << "| 2. 아이템 판매 \n";
+		std::cout << "| 3. 상점 나가기 \n";
 		std::cout << "| 골드: " << Player->GetGold() << "\n";
 		std::cout << "| 어떤 행동을 하시겠습니까?:  \n";
 
@@ -40,10 +41,13 @@ void Shop::DisplayItems(Character* Player)
 		{
 		case 1:
 			DisplayBuyMenu(Player); //아이템 구매
-			return; //구매 후 상점에서 나가기
+			break; 
 		case 2:
 			DisplaySellMenu(Player); //아이템 판매
 			break;
+		case3:
+			std::cout<<"| 상점 이용을 종료합니다.\n";
+				return;
 		default:
 		std::cout << "| 다시 어떤 행동을 할지 선택하세요! \n";
 			break;
@@ -67,8 +71,8 @@ void Shop::DisplayBuyMenu(Character* Player)
 				<< ": " << ItemPrices[i] << " 골드)";
 
 		}
-		std::cout << "| 현재 보유 골드: " << Player->GetGold() ;
-
+		std::cout << "| 현재 보유 골드: " << Player->GetGold()<<" \n";
+		std::cout << "| 0. 상점메뉴로 이동 \n";
 		std::cout << "| 구매할 아이템 번호 입력: ";
 
 		int ItemIndex;
@@ -76,7 +80,11 @@ void Shop::DisplayBuyMenu(Character* Player)
 
 		
 		// 1,2 외의 숫자를 눌렀을시 오류 메시지
-		if (ItemIndex < 1 || ItemIndex > AvailableItems.size()) 
+		if (ItemIndex < 1) 
+		{
+
+		}
+		else if (ItemIndex < 1 || ItemIndex > AvailableItems.size()) 
 		{
 			std::cout << "| 다시 어떤 아이템을 구매할 지 선택하세요!\n";
 			continue;
@@ -127,6 +135,8 @@ void Shop::DisplaySellMenu(Character* Player)
 
 void Shop::BuyItem(int Index, Character* Player)
 {
+	Item* itemToBuy = AvailableItems[Index];
+	
 	if (Player->GetGold() < ItemPrices[Index])
 	{
 		std::cout << "| 구매에 실패했습니다! 골드가 부족합니다! \n";
