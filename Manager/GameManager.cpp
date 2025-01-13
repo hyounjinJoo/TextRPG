@@ -12,6 +12,11 @@ GameManager::GameManager()
     Init();
 }
 
+GameManager::~GameManager()
+{
+
+}
+
 void GameManager::Init()
 {   
 	// 난수 초기화
