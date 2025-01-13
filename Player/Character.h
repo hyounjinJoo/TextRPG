@@ -100,7 +100,7 @@ public:
         Instance->Gold = InputGold;
     }
 
-    std::vector<Item*> GetInventory() 
+    std::vector<Item*>& GetInventory() 
     {
         return Instance->Inventory;
     }
