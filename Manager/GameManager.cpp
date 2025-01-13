@@ -5,6 +5,8 @@
 #include "../Monster/Troll.h"
 #include "../Monster/Orc.h"
 #include "../Monster/Goblin.h"
+#include "..\Item\HealthPotion.h"
+#include "..\Item\AttackBoost.h"
 #include <time.h>
 
 GameManager::GameManager()
@@ -122,6 +124,8 @@ void GameManager::EndBattle()
 {
 	// 배틀 종료 후, 턴별 배틀 정보를 출력합니다.
 	DisplayBattleInfos();
+	// 배틀 결과에 따라 메시지를 출력합니다.
+	DisplayBattleResult();
 }
 
 void GameManager::PlayTurn()
@@ -162,6 +166,8 @@ void GameManager::NextTurn()
 	{
 		BattleResult = EBattleResult::PlayerWin;
 		BattleTurn = EBattleTurn::End;
+		// 플레이어가 승리할 경우 보상을 획득합니다.
+		ReceiveBattleReward();
 	}
 	// 플레이어 체력이 없을 경우, 몬스터 승리 및 턴 종료 
 	else if (BattlePlayer->GetHealth() <= 0)
@@ -173,6 +179,67 @@ void GameManager::NextTurn()
 	{
 		// 승자가 없을 경우 다음 턴을 계산합니다. (PlayerTurn -> MonsterTurn, MonsterTurn -> PlayerTurn)
 		BattleTurn = static_cast<EBattleTurn>((static_cast<int>(BattleTurn) + 1) % static_cast<int>(EBattleTurn::End));
+	}
+}
+
+// 전투 보상
+void GameManager::ReceiveBattleReward()
+{
+	// 경험치 보상 획득
+	{
+		int RewardExperience = 50;
+		BattlePlayer->GetExperience(RewardExperience);
+		BattleReward.Experience = RewardExperience;
+	}
+
+	// 골드 보상 획득
+	{
+		int RewardGold = 10 + (rand() % 10 + 1);
+		int TotalGold = BattlePlayer->GetGold() + RewardGold;
+		BattlePlayer->SetGold(TotalGold);
+		BattleReward.Gold = RewardGold;
+	}
+	
+	// 아이템 보상
+	{
+		int RandNum = rand() % 100;
+		// 아이템 획득 확률을 벗어난 경우 리턴합니다.
+		if (RandNum >= ITEM_DROP_CHANCE)  
+		{
+			return;
+		}
+
+		Item* RewardItem = BattleMonster->DropItem();
+		// 아이템이 유효하지 않은 경우 리턴합니다.
+		if (RewardItem == nullptr)
+			return;
+
+		// 아이템 획득을 시도합니다. 
+		if (dynamic_cast<HealthPotion*>(RewardItem))
+		{
+			TryTakePotion(RewardItem, EPotionType::ITEM_IDX_HEALTHPOTION);
+		}
+		else if (dynamic_cast<AttackBoost*>(BattleReward.Item))
+		{
+			TryTakePotion(RewardItem, EPotionType::ITEM_IDX_ATTACKBOOST);
+		}
+	}
+}
+
+// 이미 인벤토리에 아이템이 있는지 확인합니다. 
+void GameManager::TryTakePotion(Item* RewardItem, EPotionType postionType)
+{
+	// 소유 중인 아이템이라면 획득한 아이템을 소멸시킵니다.
+	if (BattlePlayer->IsExistInInventory(postionType))
+	{
+		delete RewardItem;
+		BattleReward.Item = nullptr;
+	}
+	// 그렇지 않다면 아이템을 획득합니다.
+	else
+	{
+		std::vector<Item*>& Inventory = BattlePlayer->GetInventory();
+		Inventory[postionType] = RewardItem;
 	}
 }
 
@@ -201,6 +268,13 @@ void GameManager::TargetAttack(Character* Attacker, Monster* Defender)
 {
 	// 플레이어 공격, 몬스터의 HP를 수정합니다
 	Defender->TakeDamage(Attacker->GetAttack());
+}
+
+void GameManager::TargetAttack(Monster* Attacker, Character* Defender)
+{
+	// 몬스터 공격, 플레이어의 HP를 수정합니다
+	int CurrentHealth = std::max(0, Defender->GetHealth() - Attacker->GetAttack());
+	Defender->SetHealth(CurrentHealth);
 }
 
 void GameManager::DisplayBattleInfos()
@@ -259,11 +333,32 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 	}
 }
 
-void GameManager::TargetAttack(Monster* Attacker, Character* Defender)
+void GameManager::DisplayBattleResult()
 {
-	// 몬스터 공격, 플레이어의 HP를 수정합니다
-	int CurrentHealth = std::max(0, Defender->GetHealth() - Attacker->GetAttack());
-	Defender->SetHealth(CurrentHealth);
+	std::cout << "==========================전투 결과==========================" << std::endl;
+
+	switch (BattleResult)
+	{
+		case EBattleResult::PlayerWin:
+			// 보스 몬스터일 경우 
+			if (dynamic_cast<BossMonster*>(BattleMonster))
+			{
+				std::cout << "==========================게임 승리!==========================" << std::endl;
+				std::cout << "태어난 김에 보스까지 잡았으니 이제 백수가 되었습니다. 이제 현생을 사십시오." << std::endl;
+			}
+			// 일반 몬스터일 경우
+			else
+			{
+				std::cout << BattlePlayer->GetName() << "이(가) " << BattleReward.Experience << "EXP와 " << BattleReward.Gold << " 골드를 획득했습니다. " << std::endl;
+				std::cout << "현재 EXP:" << BattlePlayer->GetExperience() << " / 100 골드: " << BattlePlayer->GetGold() << std::endl;
+			}
+			break;
+		case EBattleResult::MonsterWin:
+			std::cout << BattlePlayer->GetName() << "이(가) 사망했습니다. 게임 오버!" << std::endl;
+			break;
+		default:
+			break;
+	}
 }
 
 void GameManager::VisitShop(Character* Player)

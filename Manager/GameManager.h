@@ -1,8 +1,21 @@
 ﻿#pragma once
 #include <vector>
 
+class Monster;
+class BossMonster;
+class Character;
+class Item;
+
 namespace
 {
+	#define ITEM_DROP_CHANCE 30
+
+	enum EPotionType
+	{
+		ITEM_IDX_HEALTHPOTION,
+		ITEM_IDX_ATTACKBOOST,
+	};
+
 	enum EBattleResult
 	{
 		PlayerWin,
@@ -24,11 +37,14 @@ namespace
 		int PlayerAttack;
 		EBattleTurn BattleTurn;
 	};
-}
 
-class Monster;
-class BossMonster;
-class Character;
+	struct FBattleReward
+	{
+		int Experience;
+		int Gold;
+		Item* Item;
+	};
+}
 
 class GameManager
 {
@@ -54,6 +70,8 @@ private:
 	void PlayTurn();
 	void SaveTurn();
 	void NextTurn();
+	void ReceiveBattleReward();
+	void TryTakePotion(Item* RewardItem, EPotionType PostionType);
 
 	Monster* CreateBattleMonster(int PlayerLevel);
 
@@ -63,6 +81,7 @@ private:
 
 	void DisplayBattleInfos();
 	void DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBattleTurnInfo& CurInfo, int TurnIdx);
+	void DisplayBattleResult();
 
 private:
     Character* BattlePlayer;
@@ -70,5 +89,6 @@ private:
 
 	EBattleTurn BattleTurn;
 	EBattleResult BattleResult;
+	FBattleReward BattleReward;
 	std::vector<FBattleTurnInfo> BattleTurnInfos;
 };
