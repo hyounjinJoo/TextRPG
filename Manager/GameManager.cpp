@@ -5,7 +5,6 @@
 #include "../Monster/Troll.h"
 #include "../Monster/Orc.h"
 #include "../Monster/Goblin.h"
-#include "../Monster/BossMonster.h"
 #include <time.h>
 
 GameManager::GameManager()
@@ -16,10 +15,10 @@ GameManager::GameManager()
 void GameManager::Init()
 {   
 	// 난수 초기화
-	srand(time(NULL));
+	srand(static_cast<unsigned int>(time(NULL)));
 }
 
-GameManager::Monster* GameManager::GenerateMonster(int Level)
+Monster* GameManager::GenerateMonster(int Level)
 {
 	const int MonsterCount = 3;
 	int RandNumber = rand() % MonsterCount;
@@ -44,7 +43,7 @@ GameManager::Monster* GameManager::GenerateMonster(int Level)
 	return CreatedMonster;
 }
 
-GameManager::BossMonster* GameManager::GenerateBossMonster(int Level)
+BossMonster* GameManager::GenerateBossMonster(int Level)
 { 
 	return new BossMonster(Level);
 }
