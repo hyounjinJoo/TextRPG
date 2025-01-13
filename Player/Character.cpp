@@ -45,13 +45,33 @@ void Character::GetExperience(int AddExperience)                                
     }
 }
 
+// 250113 주현진 수정, Item 사용후 삭제, erase()를 사용하지 않으므로 반드시 아이템 획득 시에는 Item을 생성해서 넣어주시기 바랍니다.
+// 수정 이유 - 요구 사항 명세가 변경되었음.
 void Character::UseItem(int Index)
 {
-    std::vector<Item*> Inventory = Instance->GetInventory();
-    if (!Inventory.empty() && Inventory.size() > Index)                                                 // 인벤토리가 비어있거나 Index가 아이템의 수를 넘어갈 경우
+    // HealthPotion, AttackBoost의 범위를 넘어가는 경우에 대한 예외처리
+    if(Index < 0 || 1 < Index)
     {
-        Inventory[Index]->GetItemDescription();
-        Inventory[Index]->Use(Instance);
-        Inventory.erase(Inventory.begin() + Index);                                                     // 사용한 아이템 제거
+        return;
     }
+
+    std::vector<Item*> Inventory = Instance->GetInventory();
+
+    // Item이 없는 경우에 대한 예외처리
+    if(Inventory.empty())
+    {
+        return;
+    }
+
+    // Item이 해당 인덱스에 없는 경우에 대한 예외처리
+    if(!Inventory[Index])
+    {
+        return;
+    }
+
+    Inventory[Index]->Use(Instance);
+
+    // Item 사용후 삭제, erase()를 사용하지 않으므로 반드시 아이템 획득 시에는 Item을 생성해서 넣어주시기 바랍니다.
+    delete Inventory[Index];
+    Inventory[Index] = nullptr;
 }
