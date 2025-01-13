@@ -15,7 +15,10 @@ GameManager::GameManager()
 
 GameManager::~GameManager()
 {
-
+	if (!BattleMonster)
+	{
+		delete BattleMonster;
+	}
 }
 
 void GameManager::Init()
