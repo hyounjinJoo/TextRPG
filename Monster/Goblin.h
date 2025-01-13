@@ -4,7 +4,7 @@
 class Goblin : public Monster
 {
 public:
-    Goblin();
+    Goblin(int Level);
     virtual ~Goblin();
 
 public:
