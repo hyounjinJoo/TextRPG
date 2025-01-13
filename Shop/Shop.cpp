@@ -65,6 +65,13 @@ void Shop::DisplayItems(Character* Player)
 		}
 	}
 }
+void Shop::DisplayBuyMenu(Character* Player)
+{
+}
+
+}void Shop::DisplaySellMenu(Character* Player)
+{
+}
 
 void Shop::BuyItem(int Index, Character* Player)
 {
