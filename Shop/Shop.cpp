@@ -69,7 +69,7 @@ void Shop::DisplayBuyMenu(Character* Player)
 {
 }
 
-}void Shop::DisplaySellMenu(Character* Player)
+void Shop::DisplaySellMenu(Character* Player)
 {
 }
 
