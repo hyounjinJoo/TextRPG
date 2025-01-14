@@ -66,6 +66,7 @@ public:
     BossMonster* GenerateBossMonster(int Level);
     void Battle(Character* Player);
     void DisplayInventory(Character* Player);
+	void DisplayPlayerStatus(Character* Player);
 	void EndCredits(); // 엔딩 크레딧
 
 private:

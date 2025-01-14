@@ -178,6 +178,11 @@ void GameManager::EndBattle()
 	DisplayBattleInfos();
 	// 배틀 결과에 따라 메시지를 출력합니다.
 	DisplayBattleResult();
+	// 플레이어 상태를 화면에 출력합니다.
+	if (BattleResult == EBattleResult::PlayerWin)
+	{
+		DisplayPlayerStatus(BattlePlayer);
+	}
 }
 
 void GameManager::InitTurn()
@@ -482,6 +487,21 @@ void GameManager::DisplayInventory(Character* Player)
 		}
 	}
 }
+
+void GameManager::DisplayPlayerStatus(Character* Player)
+{
+	if (Player == nullptr)
+		return;
+
+	std::cout << "==========================플레이어 정보==========================" << std::endl;
+	std::cout << "|레벨 : " << Player->GetLevel() << std::endl;
+	std::cout << "|이름 : " << Player->GetName() << std::endl;
+	std::cout << "|공격력 : " << Player->GetAttack() << std::endl;
+	std::cout << "|체력 : " << Player->GetHealth() << " / " << Player->GetMaxHealth() << std::endl;
+	std::cout << "|골드 : " << Player->GetGold() << std::endl;
+	std::cout << "|경험치 : " << Player->GetExperience() << " / " << 100 << std::endl;
+}
+
 
 // 엔딩 크레딧
 void GameManager::EndCredits()
