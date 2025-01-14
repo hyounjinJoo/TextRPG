@@ -111,7 +111,7 @@ BossMonster* GameManager::GenerateBossMonster(int Level)
 	return new BossMonster(Level);
 }
 
-void GameManager::Battle(Character* Player)
+bool GameManager::Battle(Character* Player)
 {
 	InitBattle(Player);
 
@@ -119,7 +119,9 @@ void GameManager::Battle(Character* Player)
 		return;
 
 	StartBattle();
-	EndBattle();
+	bool bNeedContinue = EndBattle();
+
+	return bNeedContinue;
 }
 
 bool GameManager::CanBattle()
@@ -172,17 +174,19 @@ void GameManager::StartBattle()
 	}
 }
 
-void GameManager::EndBattle()
+bool GameManager::EndBattle()
 {
 	// 배틀 종료 후, 턴별 배틀 정보를 출력합니다.
 	DisplayBattleInfos();
 	// 배틀 결과에 따라 메시지를 출력합니다.
-	DisplayBattleResult();
+	bool bNeedContinue = ReturnAndDisplayBattleResult();
 	// 플레이어 상태를 화면에 출력합니다.
 	if (BattleResult == EBattleResult::PlayerWin)
 	{
 		DisplayPlayerStatus(BattlePlayer);
 	}
+
+	return bNeedContinue;
 }
 
 void GameManager::InitTurn()
@@ -436,10 +440,11 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 	}
 }
 
-void GameManager::DisplayBattleResult()
+bool GameManager::ReturnAndDisplayBattleResult()
 {
 	std::cout << "==========================전투 결과==========================" << std::endl;
 
+	bool bResult = false;
 	switch (BattleResult)
 	{
 		case EBattleResult::PlayerWin:
@@ -452,6 +457,7 @@ void GameManager::DisplayBattleResult()
 			// 일반 몬스터일 경우
 			else
 			{
+				bResult = true;
 				std::cout << "|" << BattlePlayer->GetName() << "이(가) " << BattleReward.Experience << "EXP와 " << BattleReward.Gold << " 골드를 획득했습니다. " << std::endl;
 				std::cout << "|현재 EXP:" << BattlePlayer->GetExperience() << " / 100 골드: " << BattlePlayer->GetGold() << std::endl;
 			}
@@ -462,6 +468,8 @@ void GameManager::DisplayBattleResult()
 		default:
 			break;
 	}
+
+	return bResult;
 }
 
 // 인벤토리를 화면에 출력합니다.
