@@ -417,3 +417,28 @@ void GameManager::DisplayInventory(Character* Player)
 {
 
 }
+
+// 엔딩 크레딧
+void GameManager::EndCredits()
+{
+	// 멤버 역할과 이름.
+	std::vector<std::string> Members = {
+	"Poject Manager : 주현진",
+	"Game Manager : 김동현",
+	"Shop 제작 : 심홍기",
+	"Character 제작 : 최지한",
+	"Item 제작 : 김건우",
+	"Monster 제작 : 김도훈" };
+
+	// 각 멤버별로 한 글자씩 출력하고 다음 멤버 출력시 줄바꿈.
+	for (const std::string& Member : Members) {  // 벡터의 각 요소 순회
+		for (char C : Member) {				// 문자열의 각 문자 순회
+			std::cout << C;                 // 한 글자씩 출력
+			std::cout.flush();              // 버퍼를 강제로 비우기
+			std::this_thread::sleep_for(std::chrono::milliseconds(150));    // 150ms 대기
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(200));    // 줄 간격 대기
+		std::cout << std::endl; // 줄 바꿈
+	}
+	std::cout << std::endl;
+}
