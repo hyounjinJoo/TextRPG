@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <vector>
+#include <string>
 
 class Monster;
 class BossMonster;
@@ -9,11 +10,13 @@ class Item;
 namespace
 {
 	#define ITEM_DROP_CHANCE 30
+	#define HEALTH_RECOVERY_THRESHOLD 40
 
 	enum EPotionType
 	{
 		ITEM_IDX_HEALTHPOTION,
 		ITEM_IDX_ATTACKBOOST,
+		NONE,
 	};
 
 	enum EBattleResult
@@ -35,6 +38,9 @@ namespace
 		int MonsterAttack;
 		int PlayerHP;
 		int PlayerAttack;
+		EPotionType UsePotionType;
+		std::string UseItemName;
+		std::string UseItemDescription;
 		EBattleTurn BattleTurn;
 	};
 
@@ -67,6 +73,7 @@ private:
 	void InitBattle(Character* Player);
 	void StartBattle();
 	void EndBattle();
+	void InitTurn();
 	void PlayTurn();
 	void SaveTurn();
 	void NextTurn();
@@ -76,6 +83,7 @@ private:
 	Monster* CreateBattleMonster(int PlayerLevel);
 
 	void TryUsePotion();
+	void UsePotion(std::vector<Item*>& Inventory, EPotionType UsePotionType);
 	void TargetAttack(Monster* Attacker, Character* Defender);
 	void TargetAttack(Character* Attacker, Monster* Defender);
 
@@ -91,4 +99,5 @@ private:
 	EBattleResult BattleResult;
 	FBattleReward BattleReward;
 	std::vector<FBattleTurnInfo> BattleTurnInfos;
+	FBattleTurnInfo CurTurnInfo;
 };

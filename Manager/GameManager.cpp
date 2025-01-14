@@ -114,6 +114,7 @@ void GameManager::StartBattle()
 
 	while (BattleTurn != EBattleTurn::End)
 	{
+		InitTurn();
 		PlayTurn();
 		SaveTurn();
 		NextTurn();
@@ -126,6 +127,17 @@ void GameManager::EndBattle()
 	DisplayBattleInfos();
 	// 배틀 결과에 따라 메시지를 출력합니다.
 	DisplayBattleResult();
+}
+
+void GameManager::InitTurn()
+{
+	// 턴 진입전 데이터를 초기화합니다.
+	CurTurnInfo.MonsterHP = -1;
+	CurTurnInfo.MonsterAttack = -1;
+	CurTurnInfo.PlayerAttack = -1;
+	CurTurnInfo.PlayerHP = -1;
+	CurTurnInfo.UseItemName.clear();
+	CurTurnInfo.UseItemDescription.clear();
 }
 
 void GameManager::PlayTurn()
@@ -148,14 +160,13 @@ void GameManager::PlayTurn()
 void GameManager::SaveTurn()
 {
 	// 화면 출력에 필요한 데이터를 저장합니다.
-	FBattleTurnInfo TurnInfo;
-	TurnInfo.MonsterHP = BattleMonster->GetHealth();
-	TurnInfo.MonsterAttack = BattleMonster->GetAttack();
-	TurnInfo.PlayerHP = BattlePlayer->GetHealth();
-	TurnInfo.PlayerAttack = BattlePlayer->GetAttack();
-	TurnInfo.BattleTurn = BattleTurn;
+	CurTurnInfo.MonsterHP = BattleMonster->GetHealth();
+	CurTurnInfo.MonsterAttack = BattleMonster->GetAttack();
+	CurTurnInfo.PlayerHP = BattlePlayer->GetHealth();
+	CurTurnInfo.PlayerAttack = BattlePlayer->GetAttack();
+	CurTurnInfo.BattleTurn = BattleTurn;
 
-	BattleTurnInfos.push_back(TurnInfo);
+	BattleTurnInfos.push_back(CurTurnInfo);
 }
 
 // 다음 배틀턴을 설정합니다.
@@ -258,10 +269,32 @@ Monster* GameManager::CreateBattleMonster(int PlayerLevel)
 	return CreatedMonster;
 }
 
-/* TODO: 전투 중 포션 사용 */
+// 포션은 한 턴에 한 번 사용할 수 있습니다.
 void GameManager::TryUsePotion()
 {
+	std::vector<Item*>& Inventory = BattlePlayer->GetInventory();
+	float HealthPercent = static_cast<float>(BattlePlayer->GetHealth()) / BattlePlayer->GetMaxHealth();
 
+	// Health 포션은 체력이 40% 이하인 경우에 사용합니다.
+	if (HealthPercent <= HEALTH_RECOVERY_THRESHOLD &&
+		BattlePlayer->IsExistInInventory(EPotionType::ITEM_IDX_HEALTHPOTION))
+	{
+		UsePotion(Inventory, EPotionType::ITEM_IDX_HEALTHPOTION);
+	}
+	// AttackBoost 포션은 소유하고 있다면 바로 사용합니다.
+	else if (BattlePlayer->IsExistInInventory(EPotionType::ITEM_IDX_ATTACKBOOST))
+	{
+		UsePotion(Inventory, EPotionType::ITEM_IDX_ATTACKBOOST);
+	}
+}
+
+// 인벤토리의 포션 사용 후 화면 출력을 위해 데이터를 저장합니다.
+void GameManager::UsePotion(std::vector<Item*>& Inventory, EPotionType UsePotionType)
+{
+	CurTurnInfo.UsePotionType = UsePotionType;
+	CurTurnInfo.UseItemName = Inventory[UsePotionType]->GetName();
+	CurTurnInfo.UseItemDescription = Inventory[UsePotionType]->GetItemDescription();
+	BattlePlayer->UseItem(UsePotionType);
 }
 
 void GameManager::TargetAttack(Character* Attacker, Monster* Defender)
@@ -309,23 +342,37 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 	switch (CurInfo.BattleTurn)
 	{
 		case EBattleTurn::PlayerTurn:
+			// 해당 턴에 포션을 사용하였다면 화면에 출력합니다.
+			if (CurInfo.UsePotionType != EPotionType::NONE)
+			{
+				std::cout << BattlePlayer->GetName() << "이(가) " << CurInfo.UseItemName << "을(를) 사용합니다! " << CurInfo.UseItemDescription << "!" << std::endl;
+				
+				if (CurInfo.UsePotionType == ITEM_IDX_HEALTHPOTION)
+				{
+					std::cout << "플레이어의 현재 체력 : " << CurInfo.PlayerHP << " / " << BattlePlayer->GetMaxHealth() << std::endl;
+				}
+				else if (CurInfo.UsePotionType == ITEM_IDX_ATTACKBOOST)
+				{
+					std::cout << "플레이어의 공격력 : " << CurInfo.PlayerAttack << std::endl;
+				}
+			}
 			if (CurInfo.MonsterHP > 0)
 			{
-				std::cout << "" << BattlePlayer->GetName() << "이(가) " << BattleMonster->GetName() << "을(를) 공격합니다! " << BattleMonster->GetName() << " 체력: " << CurInfo.MonsterHP << std::endl;
+				std::cout << BattlePlayer->GetName() << "이(가) " << BattleMonster->GetName() << "을(를) 공격합니다! " << BattleMonster->GetName() << " 체력: " << CurInfo.MonsterHP << std::endl;
 			}
 			else
-				{
-			std::cout << "" << BattlePlayer->GetName() << "이(가) " << BattleMonster->GetName() << "을(를) 공격합니다! " << BattleMonster->GetName() << " 처치!" << std::endl;
+			{
+				std::cout << BattlePlayer->GetName() << "이(가) " << BattleMonster->GetName() << "을(를) 공격합니다! " << BattleMonster->GetName() << " 처치!" << std::endl;
 			}
 			break;
 		case EBattleTurn::MonsterTurn:
 			if (CurInfo.PlayerHP > 0)
 			{
-				std::cout << "" << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다!" << BattlePlayer->GetName() << "체력: " << CurInfo.PlayerHP << " / " << BattlePlayer->GetMaxHealth() << std::endl;
+				std::cout << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다!" << BattlePlayer->GetName() << "체력: " << CurInfo.PlayerHP << " / " << BattlePlayer->GetMaxHealth() << std::endl;
 			}
 			else
 				{
-			std::cout << "" << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다!" << BattlePlayer->GetName() << "체력: " << PrevInfo.PlayerHP << "->" << CurInfo.PlayerHP << std::endl;
+				std::cout << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다!" << BattlePlayer->GetName() << "체력: " << PrevInfo.PlayerHP << "->" << CurInfo.PlayerHP << std::endl;
 			}
 			break;
 		default:
