@@ -419,7 +419,6 @@ void GameManager::DisplayBattleInfos()
 		FBattleTurnInfo& CurInfo = BattleTurnInfos[TurnIdx];
 
 		DisplayBattleInfo(PrevInfo, CurInfo, TurnIdx);
-		MAKE_ALERT();
 	}
 }
 
@@ -430,7 +429,7 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 	if (TurnIdx == 1)
 	{
 		std::cout << "| 몬스터 : " << BattleMonster->GetName() << " 등장! 체력: " << PrevInfo.MonsterHP << ", 공격력: " << PrevInfo.MonsterAttack << std::endl;
-		DELAY_MILLI(1000);
+		DELAY_MILLI(1500);
 	}
 
 	switch (CurInfo.BattleTurn)
@@ -445,18 +444,18 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 				{
 					std::cout << BattleItemUsingTexts.front();
 					BattleItemUsingTexts.pop();
-					DELAY_MILLI(1000);
+					DELAY_MILLI(1500);
 				}
 
 				if (CurInfo.UsePotionType == ITEM_IDX_HEALTHPOTION)
 				{
 					std::cout << "| 플레이어의 현재 체력 : " << CurInfo.PlayerHP << " / " << BattlePlayer->GetMaxHealth() << std::endl;
-					DELAY_MILLI(1000);
+					DELAY_MILLI(1500);
 				}
 				else if (CurInfo.UsePotionType == ITEM_IDX_ATTACKBOOST)
 				{
 					std::cout << "| 플레이어의 공격력 : " << CurInfo.PlayerAttack << std::endl;
-					DELAY_MILLI(1000);
+					DELAY_MILLI(1500);
 				}
 			}
 			if (CurInfo.MonsterHP > 0)
@@ -467,7 +466,8 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 			{
 				std::cout << "| " << BattlePlayer->GetName() << "이(가) " << BattleMonster->GetName() << "을(를) 공격합니다! " << BattleMonster->GetName() << " 처치!" << std::endl;
 			}
-			DELAY_MILLI(1000);
+			MAKE_ALERT();
+			DELAY_MILLI(1500);
 			break;
 		case EBattleTurn::MonsterTurn:
 			if (CurInfo.PlayerHP > 0)
@@ -478,7 +478,7 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 				{
 				std::cout << "| " << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다! " << BattlePlayer->GetName() << " 체력: " << PrevInfo.PlayerHP << "->" << CurInfo.PlayerHP << std::endl;
 			}
-			DELAY_MILLI(1000);
+			DELAY_MILLI(1500);
 			break;
 		default:
 			break;
@@ -527,7 +527,7 @@ bool GameManager::ReturnAndDisplayBattleResult()
 			else
 			{
 				bResult = true;
-				std::cout << "| " << BattlePlayer->GetName() << "이(가) " << BattleReward.Experience << "EXP와 " << BattleReward.Gold << " 골드를 획득했습니다. " << std::endl;
+				std::cout << "| " << BattlePlayer->GetName() << "이(가) " << BattleReward.Experience << " EXP와 " << BattleReward.Gold << " 골드를 획득했습니다. " << std::endl;
 				std::cout << "| 현재 EXP:" << BattlePlayer->GetExperience() << " / 100 골드: " << BattlePlayer->GetGold() << std::endl;
 			}
 			break;
@@ -597,7 +597,7 @@ void GameManager::EndCredits()
 	"[제작 환경]",
 	"| IDE : MicroSoft Visual Studio Community 2022",
 	"| Language : ISO C++14 Standard",
-	"| Source Control : Git & GirHub",
+	"| Source Control : Git & GitHub",
 	"| 작업 기록 : Notion",
 	"| 작업 장소 : 자택, Zep",
 	"| Special Thanks : Google.com"};
