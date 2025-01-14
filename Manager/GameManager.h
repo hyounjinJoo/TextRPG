@@ -115,4 +115,8 @@ public:
 
 private:
 	Shop* GameShop;
+
+/* 진행 관련 */
+public:
+	void WaitAnyKeyPressed();
 };

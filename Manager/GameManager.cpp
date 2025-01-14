@@ -14,8 +14,12 @@
 #include <time.h>
 #include <iostream>
 #include <cctype>
+#include <conio.h>
 
 #define DELAY_MILLI(x) std::this_thread::sleep_for(std::chrono::milliseconds(x));
+#define MAKE_ALERT() std::cout.flush();\
+					 std::cout<<'\a';\
+					 std::cout.flush();
 
 GameManager::GameManager()
 : BattlePlayer(nullptr), BattleMonster(nullptr)
@@ -111,7 +115,7 @@ void GameManager::CreateCharacter()
 	DELAY_MILLI(200);
 	std::cout << "| " << BattlePlayer->GetName() << "이(가) 태어났습니다! 레벨 : " << BattlePlayer->GetLevel()
 		<< " 체력: " << BattlePlayer->GetHealth() << " 공격력: " << BattlePlayer->GetAttack() << "\n";
-	DELAY_MILLI(200);
+	WaitAnyKeyPressed();
 }
 
 Monster* GameManager::GenerateMonster(int Level)
@@ -204,7 +208,6 @@ bool GameManager::EndBattle()
 	DisplayBattleInfos();
 
 	// 배틀 결과에 따라 메시지를 출력합니다.
-	DELAY_MILLI(1500);
 	bool bNeedContinue = ReturnAndDisplayBattleResult();
 	// 플레이어 상태를 화면에 출력합니다.
 	if (bNeedContinue && BattleResult == EBattleResult::PlayerWin)
@@ -264,8 +267,6 @@ void GameManager::NextTurn()
 	{
 		BattleResult = EBattleResult::PlayerWin;
 		BattleTurn = EBattleTurn::End;
-		// 플레이어가 승리할 경우 보상을 획득합니다.
-		ReceiveBattleReward();
 	}
 	// 플레이어 체력이 없을 경우, 몬스터 승리 및 턴 종료 
 	else if (BattlePlayer->GetHealth() <= 0)
@@ -312,6 +313,8 @@ void GameManager::ReceiveBattleReward()
 		if (RewardItem == nullptr)
 			return;
 
+		std::cout << "| 몬스터가 아이템을 떨어뜨렸습니다. 떨어뜨린 아이템은..." << RewardItem->GetName() << "입니다.\n";
+
 		// 아이템 획득을 시도합니다. 
 		if (dynamic_cast<HealthPotion*>(RewardItem))
 		{
@@ -330,12 +333,14 @@ void GameManager::TryTakePotion(Item* RewardItem, EPotionType postionType)
 	// 소유 중인 아이템이라면 획득한 아이템을 소멸시킵니다.
 	if (BattlePlayer->IsExistInInventory(postionType))
 	{
+		std::cout << "| 하지만, 이미 소지한 아이템이므로 필요없으니 버립니다.\n";
 		delete RewardItem;
 		BattleReward.Item = nullptr;
 	}
 	// 그렇지 않다면 아이템을 획득합니다.
 	else
 	{
+		std::cout << "| 없는 아이템이니 줍고 갑니다.\n";
 		std::vector<Item*>& Inventory = BattlePlayer->GetInventory();
 		Inventory[postionType] = RewardItem;
 	}
@@ -414,8 +419,7 @@ void GameManager::DisplayBattleInfos()
 		FBattleTurnInfo& CurInfo = BattleTurnInfos[TurnIdx];
 
 		DisplayBattleInfo(PrevInfo, CurInfo, TurnIdx);
-
-		DELAY_MILLI(1000);
+		MAKE_ALERT();
 	}
 }
 
@@ -426,6 +430,7 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 	if (TurnIdx == 1)
 	{
 		std::cout << "| 몬스터 : " << BattleMonster->GetName() << " 등장! 체력: " << PrevInfo.MonsterHP << ", 공격력: " << PrevInfo.MonsterAttack << std::endl;
+		DELAY_MILLI(1000);
 	}
 
 	switch (CurInfo.BattleTurn)
@@ -435,14 +440,17 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 			if (CurInfo.UsePotionType != EPotionType::NONE)
 			{
 				std::cout << "| " << BattlePlayer->GetName() << "이(가) " << CurInfo.UseItemName << "을(를) 사용합니다! " << CurInfo.UseItemDescription << "!" << std::endl;
+				DELAY_MILLI(1000);
 				
 				if (CurInfo.UsePotionType == ITEM_IDX_HEALTHPOTION)
 				{
 					std::cout << "| 플레이어의 현재 체력 : " << CurInfo.PlayerHP << " / " << BattlePlayer->GetMaxHealth() << std::endl;
+					DELAY_MILLI(1000);
 				}
 				else if (CurInfo.UsePotionType == ITEM_IDX_ATTACKBOOST)
 				{
 					std::cout << "| 플레이어의 공격력 : " << CurInfo.PlayerAttack << std::endl;
+					DELAY_MILLI(1000);
 				}
 			}
 			if (CurInfo.MonsterHP > 0)
@@ -453,6 +461,7 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 			{
 				std::cout << "| " << BattlePlayer->GetName() << "이(가) " << BattleMonster->GetName() << "을(를) 공격합니다! " << BattleMonster->GetName() << " 처치!" << std::endl;
 			}
+			DELAY_MILLI(1000);
 			break;
 		case EBattleTurn::MonsterTurn:
 			if (CurInfo.PlayerHP > 0)
@@ -463,6 +472,7 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 				{
 				std::cout << "| " << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다! " << BattlePlayer->GetName() << " 체력: " << PrevInfo.PlayerHP << "->" << CurInfo.PlayerHP << std::endl;
 			}
+			DELAY_MILLI(1000);
 			break;
 		default:
 			break;
@@ -480,8 +490,12 @@ bool GameManager::ReturnAndDisplayBattleResult()
 			bBattleMonsterIsBoss = true;
 		}
 
+		// 플레이어가 승리한 보상을 획득합니다.
+		ReceiveBattleReward();
 		delete BattleMonster;
 		BattleMonster = nullptr;
+
+		WaitAnyKeyPressed();
 	}
 
 	system("cls");
@@ -498,7 +512,9 @@ bool GameManager::ReturnAndDisplayBattleResult()
 			if (bBattleMonsterIsBoss)
 			{
 				std::cout << "==========================게임 승리!==========================" << std::endl;
-				std::cout << "| 태어난 김에 보스까지 잡았으니 이제 백수가 되었습니다. 이제 현생을 사십시오." << std::endl;
+				std::cout << "| 태어난 김에 보스까지 잡았으니 이제 백수가 되었습니다.\n";
+				std::cout << "| 이제 현생을 사십시오.\n";
+				WaitAnyKeyPressed();
 			}
 			// 일반 몬스터일 경우
 			else
@@ -613,5 +629,25 @@ void GameManager::VisitShop(Character* Player)
 			std::cout << "Y 또는 N을 입력해 주세요." << std::endl;
 			break;
 		}		
+	}
+}
+
+void GameManager::WaitAnyKeyPressed()
+{
+	std::cout << "| 계속하려면 엔터키를 입력하세요";
+
+	int Limit = 5;
+	int Count = 0;
+	while(true)
+	{
+		if(Count++ < Limit)
+			std::cout << ".";
+
+		DELAY_MILLI(100)
+		if(_kbhit() && _getch() == '\r')
+		{
+			system("cls");
+			break;
+		}
 	}
 }
