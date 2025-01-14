@@ -506,8 +506,6 @@ bool GameManager::ReturnAndDisplayBattleResult()
 			break;
 	}
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(150));
-
 	return bResult;
 }
 
@@ -590,7 +588,8 @@ void GameManager::VisitShop(Character* Player)
 
 		YesNo = std::cin.get();
 		YesNo = std::toupper(YesNo);
-		// 입력 버퍼를 비웁니다.
+
+		std::cin.clear();
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 		switch (YesNo) {
@@ -605,5 +604,7 @@ void GameManager::VisitShop(Character* Player)
 			std::cout << "Y 또는 N을 입력해 주세요." << std::endl;
 			break;
 		}
+		// 입력 버퍼를 비웁니다.
+		
 	}
 }
