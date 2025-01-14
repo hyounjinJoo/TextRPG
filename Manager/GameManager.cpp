@@ -133,7 +133,6 @@ bool GameManager::Battle(Character* Player)
 	InitBattle(Player);
 
 	assert(CanBattle());
-
 	StartBattle();
 	bool bNeedContinue = EndBattle();
 
@@ -394,7 +393,7 @@ void GameManager::DisplayBattleInfos()
 	// [1] 배틀 시작후 1턴 이상의 전투 정보
 	static const int MIN_TURN_IDX = 2;
 
- 	if (BattleTurnInfos.size() <= MIN_TURN_IDX)
+ 	if (BattleTurnInfos.size() < MIN_TURN_IDX)
 		return;
 
 	for (int TurnIdx = 1; TurnIdx < BattleTurnInfos.size(); ++TurnIdx)
@@ -413,7 +412,6 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 	if (TurnIdx == 1)
 	{
 		std::cout << "| 몬스터 : " << BattleMonster->GetName() << " 등장! 체력: " << PrevInfo.MonsterHP << ", 공격력: " << PrevInfo.MonsterAttack << std::endl;
-		return;
 	}
 
 	switch (CurInfo.BattleTurn)
@@ -485,6 +483,8 @@ bool GameManager::ReturnAndDisplayBattleResult()
 		default:
 			break;
 	}
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(150));
 
 	return bResult;
 }
