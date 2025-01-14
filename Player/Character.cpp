@@ -9,6 +9,18 @@ Character::Character(std::string Name) : Name(Name), Level(1), Health(0), MaxHea
 
 Character::~Character()
 {
+    if(Instance)
+    {
+        Instance = nullptr;
+}
+
+    for (Item* item : Inventory)
+    {
+        delete item;
+        item = nullptr;
+    }
+
+    Inventory.clear();
 }
 
 void Character::DisplayStatus()

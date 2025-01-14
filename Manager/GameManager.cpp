@@ -20,12 +20,25 @@ GameManager::GameManager()
 
 GameManager::~GameManager()
 {
-	if (!BattleMonster)
+	if (BattleMonster)
 	{
 		delete BattleMonster;
+		BattleMonster = nullptr;
+	}
+
+	if(GameShop)
+	{
+		delete GameShop;
+		GameShop = nullptr;
 	}
 
 	BattleTurnInfos.clear();
+
+	if(BattlePlayer)
+	{
+		delete BattlePlayer;
+		BattlePlayer = nullptr;
+}
 }
 
 void GameManager::Init()

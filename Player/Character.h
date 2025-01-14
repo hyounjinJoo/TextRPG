@@ -9,6 +9,9 @@ class Item;
 
 class Character
 {
+public:
+    ~Character();
+
 private:
     Character(std::string Name);
     ~Character();
