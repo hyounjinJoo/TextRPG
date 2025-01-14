@@ -29,8 +29,6 @@ void GameManager::Init()
 {   
 	// 난수 초기화
 	srand(static_cast<unsigned int>(time(NULL)));
-
-	CreateCharacter();
 }
 
 void GameManager::CreateCharacter()
