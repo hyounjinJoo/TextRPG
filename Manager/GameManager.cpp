@@ -624,7 +624,7 @@ void GameManager::VisitShop(Character* Player)
 
 	std::string YesNo;
 	static int EasterEgg = 1;
-	int haha = 3;
+	int haha = 1;
 	std::string NormalSTR =    "==========================상점 방문==========================\n";
 	std::string EasterEggSTR = "==========================상점 방문========아니좀제대로입력해===\n";
 	std::string PrintSTR = NormalSTR;
@@ -659,6 +659,10 @@ void GameManager::VisitShop(Character* Player)
 				DELAY_MILLI(100);
 				system("cls");
 				PrintSTR = EasterEggSTR;
+				std::cout << PrintSTR;
+				DELAY_MILLI(200);
+				system("cls");
+				PrintSTR = NormalSTR;
 			}
 			else
 			{
