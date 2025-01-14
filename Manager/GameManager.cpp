@@ -413,7 +413,26 @@ void GameManager::VisitShop(Character* Player)
     
 }
 
+// 인벤토리를 화면에 출력합니다.
 void GameManager::DisplayInventory(Character* Player)
 {
+	// 플레이어가 유효한지 확인합니다.
+	if (Player == nullptr)
+		return;
 
+	std::vector<Item*>& Inventory = Player->GetInventory();
+
+	std::cout << "==========================인벤토리==========================" << std::endl;
+	// 인벤토리가 비어있는지 확입합니다.
+	if (Inventory.empty())
+	{
+		std::cout << "현재 아이템이 없습니다." << std::endl;
+	}
+	else
+	{
+		for (int idx = 0; idx < Inventory.size(); ++idx)
+		{
+			std::cout << idx << ". " << Inventory[idx]->GetItemDescription() << std::endl;
+		}
+	}
 }
