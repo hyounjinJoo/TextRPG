@@ -71,6 +71,9 @@ public:
 private:
     void Init();
 
+/* 캐릭터 생성 */
+	void CreateCharacter();
+
 /* 전투 관련 */
 	bool CanBattle();
 	void InitBattle(Character* Player);
