@@ -21,14 +21,17 @@ BossMonster::BossMonster(int Level) : Name("투명드래곤") // 투명드래곤
     Attack = Level * RandomAttack;
 
     // 투명드래곤 생성시 출력되는 메시지.
-    cout << "크아아아아" << endl;
+    cout << "| 투명 트래곤 : 크아아아아" << endl;
 
 }
 
 BossMonster::~BossMonster()
 {
     // 투명드래곤 소멸시 출력되는 메시지.
-    cout << "크아아아악" << endl;
+    if (Health <= 0)
+    {
+        cout << "| 투명 트래곤 : 크아아아악" << endl;
+    }
 }
 
 const std::string& BossMonster::GetName() const

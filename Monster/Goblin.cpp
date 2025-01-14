@@ -27,7 +27,10 @@ Goblin::Goblin(int Level) : Name("고블린")
 Goblin::~Goblin()
 {
     // 고블린 소멸시 출력되는 메시지.
-    cout << "| 고블린 : 끼에엑" << endl;
+    if (Health <= 0)
+    {
+        cout << "| 고블린 : 끼에엑" << endl;
+    }
 }
 
 const std::string& Goblin::GetName() const

@@ -21,13 +21,16 @@ Troll::Troll(int Level) : Name("트롤") // 트롤 : 일반적으로 지능은 �
     Attack = Level * RandomAttack;
 
     // 트롤 생성시 출력되는 메시지.
-    cout << "그어어어!!" << endl;
+    cout << "| 트롤 : 그어어어!!" << endl;
 }
 
 Troll::~Troll()
 {
 	// 트롤 소멸시 출력되는 메시지.
-	cout << "그오오억" << endl;
+    if (Health <= 0)
+    {
+        cout << "| 트롤 : 그오오억" << endl;
+    }
 }
 
 const std::string& Troll::GetName() const
