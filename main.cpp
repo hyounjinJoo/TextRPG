@@ -15,6 +15,10 @@ int main(int argc, char* argv[])
 	while(bNeedContinueBattle)
 	{
 		bNeedContinueBattle = Manager->Battle(Character::GetInstance());
+		if(bNeedContinueBattle)
+		{
+			Manager->VisitShop(Character::GetInstance());
+		}
 	}
 
 	delete Manager;
