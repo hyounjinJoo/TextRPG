@@ -8,6 +8,7 @@ class Monster;
 class BossMonster;
 class Character;
 class Item;
+class Shop;
 
 namespace
 {
@@ -64,7 +65,6 @@ public:
     Monster* GenerateMonster(int Level);
     BossMonster* GenerateBossMonster(int Level);
     void Battle(Character* Player);
-    void VisitShop(Character* Player);
     void DisplayInventory(Character* Player);
 	void EndCredits(); // 엔딩 크레딧
 
@@ -87,7 +87,7 @@ private:
 	void TryTakePotion(Item* RewardItem, EPotionType PostionType);
 
 	Monster* CreateBattleMonster(int PlayerLevel);
-
+	
 	void TryUsePotion();
 	void UsePotion(std::vector<Item*>& Inventory, EPotionType UsePotionType);
 	void TargetAttack(Monster* Attacker, Character* Defender);
@@ -106,4 +106,11 @@ private:
 	FBattleReward BattleReward;
 	std::vector<FBattleTurnInfo> BattleTurnInfos;
 	FBattleTurnInfo CurTurnInfo;
+
+/* Shop 관련 */
+public:
+	void VisitShop(Character* Player);
+
+private:
+	Shop* GameShop;
 };

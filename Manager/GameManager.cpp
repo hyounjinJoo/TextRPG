@@ -7,7 +7,10 @@
 #include "../Monster/Goblin.h"
 #include "..\Item\HealthPotion.h"
 #include "..\Item\AttackBoost.h"
+#include "..\Shop\Shop.h"
 #include <time.h>
+#include <iostream>
+#include <cctype>
 
 GameManager::GameManager()
 : BattlePlayer(nullptr), BattleMonster(nullptr)
@@ -29,6 +32,7 @@ void GameManager::Init()
 {   
 	// 난수 초기화
 	srand(static_cast<unsigned int>(time(NULL)));
+	GameShop = new Shop();
 }
 
 void GameManager::CreateCharacter()
@@ -455,11 +459,6 @@ void GameManager::DisplayBattleResult()
 	}
 }
 
-void GameManager::VisitShop(Character* Player)
-{
-    
-}
-
 // 인벤토리를 화면에 출력합니다.
 void GameManager::DisplayInventory(Character* Player)
 {
@@ -507,4 +506,35 @@ void GameManager::EndCredits()
 		std::cout << std::endl; // 줄 바꿈
 	}
 	std::cout << std::endl;
+}
+
+
+// 상점 방문 구현
+void GameManager::VisitShop(Character* Player)
+{
+	if (Player == nullptr)
+		return;
+
+	char YesNo = 'N';
+
+	while (true)
+	{
+		std::cout << "| 상점을 방문하시겠습니까? (Y/N) : ";
+
+		YesNo = std::cin.get();
+		YesNo = std::toupper(YesNo);
+		// 입력 버퍼를 비웁니다.
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+		switch (YesNo) {
+		case 'Y':
+			GameShop->DisplayItems(Player);
+			return;
+		case 'N':
+			return;
+		default:
+			std::cout << "Y 또는 N을 입력해 주세요." << std::endl;
+			break;
+		}
+	}
 }
