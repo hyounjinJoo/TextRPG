@@ -14,7 +14,6 @@ public:
 
 private:
     Character(std::string Name);
-    ~Character();
 
     Character(const Character&) = delete;
     Character& operator=(const Character&) = delete;
@@ -111,7 +110,11 @@ public:
     // 250113 주현진 추가. GameManager에서 편하게 해당 아이템의 여부를 확인할 수 있도록 추가했음.
     bool IsExistInInventory(int Index)
     {
-        return Instance->Inventory[Index] ? true : false;
+        if(Inventory.empty())
+        {
+            return false;
+        }
+        return Instance->Inventory[Index] != nullptr ? true : false;
     }
 
 private:

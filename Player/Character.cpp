@@ -5,6 +5,7 @@ Character* Character::Instance = nullptr;
 Character::Character(std::string Name) : Name(Name), Level(1), Health(0), MaxHealth(200), Attack(30), Experience(0), Gold(0)
 {
     Health = MaxHealth;
+    Inventory.resize(2);
 }
 
 Character::~Character()
@@ -12,7 +13,7 @@ Character::~Character()
     if(Instance)
     {
         Instance = nullptr;
-}
+    }
 
     for (Item* item : Inventory)
     {
@@ -67,7 +68,7 @@ void Character::UseItem(int Index)
         return;
     }
 
-    std::vector<Item*> Inventory = Instance->GetInventory();
+    std::vector<Item*>& Inventory = Instance->GetInventory();
 
     // Item이 없는 경우에 대한 예외처리
     if(Inventory.empty())

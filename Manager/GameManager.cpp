@@ -212,6 +212,7 @@ void GameManager::InitTurn()
 	CurTurnInfo.MonsterAttack = -1;
 	CurTurnInfo.PlayerAttack = -1;
 	CurTurnInfo.PlayerHP = -1;
+	CurTurnInfo.UsePotionType = EPotionType::NONE;
 	CurTurnInfo.UseItemName.clear();
 	CurTurnInfo.UseItemDescription.clear();
 }
@@ -306,7 +307,7 @@ void GameManager::ReceiveBattleReward()
 		{
 			TryTakePotion(RewardItem, EPotionType::ITEM_IDX_HEALTHPOTION);
 		}
-		else if (dynamic_cast<AttackBoost*>(BattleReward.Item))
+		else if (dynamic_cast<AttackBoost*>(RewardItem))
 		{
 			TryTakePotion(RewardItem, EPotionType::ITEM_IDX_ATTACKBOOST);
 		}
