@@ -26,12 +26,11 @@ void Shop::DisplayItems(Character* Player)
 	while (true)
 	{
 		std::cout << "\n====== 상점에 오신걸 환영합니다! ======\n";
-		std::cout << "\n | 행동을 선택해주세요: \n";
+		std::cout << "\n| 행동을 선택해주세요: \n";
 		std::cout << "| 1. 아이템 구매 \n";
 		std::cout << "| 2. 아이템 판매 \n";
 		std::cout << "| 3. 상점 나가기 \n";
-		std::cout << "| 골드: " << Player->GetGold() << "\n";
-		std::cout << "| 어떤 행동을 하시겠습니까?:  \n";
+		std::cout << "| 어떤 행동을 하시겠습니까?:  ";
 
 		int Choice;
 		std::cin >> Choice;
@@ -45,7 +44,7 @@ void Shop::DisplayItems(Character* Player)
 			DisplaySellMenu(Player); //아이템 판매
 			break;
 		case 3:
-			std::cout<<"| 상점 이용을 종료합니다.\n";
+			std::cout<<"\n| 상점 이용을 종료합니다.\n";
 				return;
 		default:
 		std::cout << "| 다시 어떤 행동을 할지 선택하세요! \n";
@@ -85,7 +84,7 @@ void Shop::DisplayBuyMenu(Character* Player)
 		}
 		else if (ItemIndex < 1 || ItemIndex > AvailableItems.size()) 
 		{
-			std::cout << "| 다시 어떤 아이템을 구매할 지 선택하세요!\n";
+			std::cout << "\n| 다시 어떤 아이템을 구매할 지 선택하세요!\n";
 			continue;
 		}
 		BuyItem(ItemIndex - 1, Player);
@@ -101,6 +100,7 @@ void Shop::DisplaySellMenu(Character* Player)
 	if (Inventory.empty())
 	{
 		std::cout << "\n| 현재 아이템이 없습니다!\n";
+		std::cout << "| 상점메뉴로 돌아갑니다!\n";
 		return;
 	}
 	while (true)
