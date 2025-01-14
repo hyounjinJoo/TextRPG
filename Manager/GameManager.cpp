@@ -412,7 +412,7 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 	// 첫 턴에는 몬스터의 정보를 출력합니다.
 	if (TurnIdx == 1)
 	{
-		std::cout << "|몬스터" << BattlePlayer->GetName() << " 등장! 체력: " << PrevInfo.MonsterHP << ", 공격력: " << PrevInfo.MonsterAttack << std::endl;
+		std::cout << "| 몬스터 : " << BattleMonster->GetName() << " 등장! 체력: " << PrevInfo.MonsterHP << ", 공격력: " << PrevInfo.MonsterAttack << std::endl;
 		return;
 	}
 
@@ -445,11 +445,11 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 		case EBattleTurn::MonsterTurn:
 			if (CurInfo.PlayerHP > 0)
 			{
-				std::cout << "|" << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다!" << BattlePlayer->GetName() << "체력: " << CurInfo.PlayerHP << " / " << BattlePlayer->GetMaxHealth() << std::endl;
+				std::cout << "|" << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다! " << BattlePlayer->GetName() << " 체력: " << CurInfo.PlayerHP << " / " << BattlePlayer->GetMaxHealth() << std::endl;
 			}
 			else
 				{
-				std::cout << "|" << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다!" << BattlePlayer->GetName() << "체력: " << PrevInfo.PlayerHP << "->" << CurInfo.PlayerHP << std::endl;
+				std::cout << "|" << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다! " << BattlePlayer->GetName() << " 체력: " << PrevInfo.PlayerHP << "->" << CurInfo.PlayerHP << std::endl;
 			}
 			break;
 		default:
