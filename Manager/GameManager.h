@@ -1,8 +1,8 @@
 ﻿#pragma once
-#include <vector>
 #include <string>
 #include <thread> // EndCredits에서 sleep_for 사용
 #include <chrono> // EndCredits에서 시간 관련 기능
+#include <queue>
 
 class Monster;
 class BossMonster;
@@ -99,6 +99,9 @@ private:
 	// 플레이어가 살아있는 경우 true 반환, 아닌 경우 false 반환
 	bool ReturnAndDisplayBattleResult();
 
+public:
+	void PushItemUsingText(std::string Text) { BattleItemUsingTexts.push(Text); }
+
 private:
     Character* BattlePlayer;
     Monster* BattleMonster;
@@ -108,6 +111,7 @@ private:
 	FBattleReward BattleReward;
 	std::vector<FBattleTurnInfo> BattleTurnInfos;
 	FBattleTurnInfo CurTurnInfo;
+	std::queue<std::string> BattleItemUsingTexts;
 
 /* Shop 관련 */
 public:

@@ -38,7 +38,7 @@ public:
     void DisplayStatus();
     void LevelUp();
     void GetExperience(int AddExperience);
-    void UseItem(int Index);
+    void UseItem(int Index, class GameManager* manager);
 
     std::string GetName() 
     {

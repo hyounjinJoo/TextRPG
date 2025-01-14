@@ -12,5 +12,5 @@ public:
 
     virtual std::string GetName() const = 0;
     virtual std::string GetItemDescription() const = 0;
-    virtual void Use(Character* Player) = 0;
+    virtual void Use(Character* Player, class GameManager* manager) = 0;
 };

@@ -1,4 +1,5 @@
 ﻿#include "HealthPotion.h"
+#include "../Manager/GameManager.h"
 
 HealthPotion::HealthPotion()
 {
@@ -23,28 +24,28 @@ std::string HealthPotion::GetItemDescription() const
     return StrItemDescription;
 }
 
-void HealthPotion::Use(Character* Player)
+void HealthPotion::Use(Character* Player, GameManager* manager)
 {
     int CurrentHP = Player->GetHealth();
     int HealthHP = CurrentHP + HealthRestore;;
 
     if (CurrentHP >= Player->GetMaxHealth())
     {
-        std::cout << "| " << Player->GetName() << "은(는) 회복 물약을 먹을 필요가 없습니다." << std::endl;
-        std::cout << "| 사용이 취소 되었습니다." << std::endl;
+        manager->PushItemUsingText("| " + Player->GetName() + "은(는) 회복 물약을 먹을 필요가 없습니다.\n");
+        manager->PushItemUsingText("| 사용이 취소 되었습니다.\n");
         return;
     }
 
     if (HealthHP > Player->GetMaxHealth())
     {
-        std::cout << "| " << Player->GetName() << "은(는) HP " << std::to_string(HealthHP - Player->GetMaxHealth()) << " 을 회복했습니다. " << std::endl;
+        manager->PushItemUsingText("| " + Player->GetName() + "은(는) HP " + std::to_string(HealthHP - Player->GetMaxHealth()) + " 을 회복했습니다.\n");
         
         HealthHP = Player->GetMaxHealth();
         Player->SetHealth(HealthHP);
     }
     else
     {
-        std::cout << "| " << Player->GetName() << "은(는) HP " << HealthRestore << " 을 회복했습니다. " << std::endl;
+        manager->PushItemUsingText("| " + Player->GetName() + "은(는) HP " + std::to_string(HealthRestore) + " 을 회복했습니다.\n");
         Player->SetHealth(HealthHP);
     }
 }

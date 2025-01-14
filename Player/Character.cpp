@@ -1,4 +1,5 @@
 ﻿#include "Character.h"
+#include "../Manager/GameManager.h"
 
 Character* Character::Instance = nullptr;
 
@@ -60,7 +61,7 @@ void Character::GetExperience(int AddExperience)                                
 
 // 250113 주현진 수정, Item 사용후 삭제, erase()를 사용하지 않으므로 반드시 아이템 획득 시에는 Item을 생성해서 넣어주시기 바랍니다.
 // 수정 이유 - 요구 사항 명세가 변경되었음.
-void Character::UseItem(int Index)
+void Character::UseItem(int Index, GameManager* manager)
 {
     // HealthPotion, AttackBoost의 범위를 넘어가는 경우에 대한 예외처리
     if(Index < 0 || 1 < Index)
@@ -82,7 +83,7 @@ void Character::UseItem(int Index)
         return;
     }
 
-    Inventory[Index]->Use(Instance);
+    Inventory[Index]->Use(Instance, manager);
 
     // Item 사용후 삭제, erase()를 사용하지 않으므로 반드시 아이템 획득 시에는 Item을 생성해서 넣어주시기 바랍니다.
     delete Inventory[Index];

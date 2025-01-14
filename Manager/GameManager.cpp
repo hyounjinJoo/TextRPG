@@ -387,7 +387,7 @@ void GameManager::UsePotion(std::vector<Item*>& Inventory, EPotionType UsePotion
 	CurTurnInfo.UsePotionType = UsePotionType;
 	CurTurnInfo.UseItemName = Inventory[UsePotionType]->GetName();
 	CurTurnInfo.UseItemDescription = Inventory[UsePotionType]->GetItemDescription();
-	BattlePlayer->UseItem(UsePotionType);
+	BattlePlayer->UseItem(UsePotionType, this);
 }
 
 void GameManager::TargetAttack(Character* Attacker, Monster* Defender)
@@ -441,7 +441,13 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 			{
 				std::cout << "| " << BattlePlayer->GetName() << "이(가) " << CurInfo.UseItemName << "을(를) 사용합니다! " << CurInfo.UseItemDescription << "!" << std::endl;
 				DELAY_MILLI(1000);
-				
+				while (!BattleItemUsingTexts.empty())
+				{
+					std::cout << BattleItemUsingTexts.front();
+					BattleItemUsingTexts.pop();
+					DELAY_MILLI(1000);
+				}
+
 				if (CurInfo.UsePotionType == ITEM_IDX_HEALTHPOTION)
 				{
 					std::cout << "| 플레이어의 현재 체력 : " << CurInfo.PlayerHP << " / " << BattlePlayer->GetMaxHealth() << std::endl;
