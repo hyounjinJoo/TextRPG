@@ -47,7 +47,7 @@ void Shop::DisplayItems(Character* Player)
 			std::cout<<"\n| 상점 이용을 종료합니다.\n";
 				return;
 		default:
-		std::cout << "| 다시 어떤 행동을 할지 선택하세요! \n";
+		std::cout << "| 다시 어떤 행동을 할지 선택하세요! \n\n";
 			break;
 		}
 	}
@@ -69,8 +69,8 @@ void Shop::DisplayBuyMenu(Character* Player)
 				<< ": " << ItemPrices[i] << " 골드)";
 
 		}
-		std::cout << "| 현재 보유 골드: " << Player->GetGold()<<" \n";
 		std::cout << "| 0. 상점메뉴로 이동 \n";
+		std::cout << "| 현재 보유 골드: " << Player->GetGold()<<" \n";
 		std::cout << "| 구매할 아이템 번호 입력: ";
 
 		int ItemIndex;
@@ -84,7 +84,7 @@ void Shop::DisplayBuyMenu(Character* Player)
 		}
 		else if (ItemIndex < 1 || ItemIndex > AvailableItems.size()) 
 		{
-			std::cout << "\n| 다시 어떤 아이템을 구매할 지 선택하세요!\n";
+			std::cout << "\n| 다시 어떤 아이템을 구매할 지 선택하세요!\n\n";
 			continue;
 		}
 		BuyItem(ItemIndex - 1, Player);
@@ -115,14 +115,18 @@ void Shop::DisplaySellMenu(Character* Player)
 						<< item->GetItemDescription()
 						<< " (판매 가격: " << ItemPrices[i] * 0.6 << " Gold)\n";
 		}
-		std::cout << "| 판매할 아이템 번호 입력: \n";
+		std::cout << "| 0. 상점메뉴로 이동 \n";
+		std::cout << "| 판매할 아이템 번호 입력: ";
 
 		int ItemIndex;
 		std::cin >> ItemIndex;
-
-		if (ItemIndex < 1 || ItemIndex > Inventory.size())
+		if (ItemIndex == 0)
 		{
-			std::cout << "| 다시 어떤 아이템을 팔지 선택해주세요!\n";
+			return;
+		}
+		else if (ItemIndex < 1 || ItemIndex > Inventory.size())
+		{
+			std::cout << "| 다시 어떤 아이템을 팔지 선택해주세요!\n\n";
 			continue;
 		}
 
@@ -168,7 +172,7 @@ void Shop::SellItem(int Index, Character* Player)
 	// 유효하지 않은 인덱스 체크
 	if (Index < 0 || Index >= Inventory.size())
 	{
-		std::cout << "|유효하지 않은 아이템 번호입니다! 다시 선택해주세요.\n";
+		std::cout << "|유효하지 않은 아이템 번호입니다! 다시 선택해주세요.\n\n";
 		return;
 	}
 
