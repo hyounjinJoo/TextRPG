@@ -622,30 +622,48 @@ void GameManager::VisitShop(Character* Player)
 	if (Player == nullptr)
 		return;
 
-	char YesNo = 'N';
-
+	std::string YesNo;
+	static int EasterEgg = 1;
+	int haha = 3;
+	std::string NormalSTR =    "==========================상점 방문==========================\n";
+	std::string EasterEggSTR = "==========================상점 방문========아니좀제대로입력해===\n";
+	std::string PrintSTR = NormalSTR;
 	while (true)
 	{
-		std::cout << "==========================상점 방문==========================" << std::endl;
+		std::cout << PrintSTR;
 		std::cout << "| 상점을 방문하시겠습니까? (Y/N) : ";
 
-		YesNo = std::cin.get();
-		YesNo = std::toupper(YesNo);
-
 		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cin >> YesNo;
 
-		switch (YesNo) {
-		case 'Y':
+		if(YesNo == "Y" || YesNo == "y")
+		{
 			GameShop->DisplayItems(Player);
 			system("cls");
 			return;
-		case 'N':
+		}
+		else if(YesNo == "N" || YesNo == "n")
+		{
 			system("cls");
 			return;
-		default:
-			std::cout << "Y 또는 N을 입력해 주세요." << std::endl;
-			break;
+		}
+		else
+		{
+			std::cout << "| Y 또는 N을 입력해 주세요." << std::endl;
+			DELAY_MILLI(1000);
+			system("cls");
+			if(EasterEgg++ >= haha)
+			{
+				EasterEgg = 1;
+				std::cout << "히히 오줌발싸!\n";
+				DELAY_MILLI(100);
+				system("cls");
+				PrintSTR = EasterEggSTR;
+			}
+			else
+			{
+				PrintSTR = NormalSTR;
+			}
 		}		
 	}
 }
