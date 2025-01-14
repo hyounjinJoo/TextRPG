@@ -45,6 +45,16 @@ namespace
 		std::string UseItemName;
 		std::string UseItemDescription;
 		EBattleTurn BattleTurn;
+
+		FBattleTurnInfo()
+			: MonsterHP(-1)
+			, MonsterAttack(-1)
+			, PlayerHP(-1)
+			, PlayerAttack(-1)
+			, UsePotionType(EPotionType::NONE)
+			, BattleTurn(EBattleTurn::End)
+		{
+		}
 	};
 
 	struct FBattleReward
@@ -52,6 +62,13 @@ namespace
 		int Experience;
 		int Gold;
 		Item* Item;
+
+		FBattleReward()
+			: Experience(0)
+			, Gold(0)
+			, Item(nullptr)
+		{
+		}
 	};
 }
 

@@ -13,9 +13,9 @@ BossMonster::BossMonster(int Level) : Name("투명드래곤") // 투명드래곤
     random_device R;
     mt19937 Gen(R());
     uniform_int_distribution<int> DistHealth(30, 45); // 보스 몬스터의 체력은 기존 몬스터의 1.5배 범위를 랜덤으로 설정.
-    uniform_int_distribution<int> DistAttack(7.5, 15); // 보스 몬스터의 공격력은 기존 몬스터의 1.5배 범위를 랜덤으로 설정.
+    uniform_int_distribution<int> DistAttack(75, 150); // 보스 몬스터의 공격력은 기존 몬스터의 1.5배 범위를 랜덤으로 설정.
     int RandomHealth = DistHealth(Gen);
-    int RandomAttack = DistAttack(Gen);
+    int RandomAttack = static_cast<int>(DistAttack(Gen) * 0.1);
 
     Health = Level * RandomHealth;
     Attack = Level * RandomAttack;
