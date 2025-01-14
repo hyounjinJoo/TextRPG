@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <vector>
 #include <string>
+#include <thread> // EndCredits에서 sleep_for 사용
+#include <chrono> // EndCredits에서 시간 관련 기능
 
 class Monster;
 class BossMonster;
@@ -64,6 +66,7 @@ public:
     void Battle(Character* Player);
     void VisitShop(Character* Player);
     void DisplayInventory(Character* Player);
+	void EndCredits(); // 엔딩 크레딧
 
 private:
     void Init();
