@@ -46,6 +46,7 @@ void GameManager::Init()
 	// 난수 초기화
 	srand(static_cast<unsigned int>(time(NULL)));
 	GameShop = new Shop();
+	CreateCharacter();
 }
 
 void GameManager::CreateCharacter()
@@ -92,7 +93,7 @@ void GameManager::CreateCharacter()
 		}
 	} while (bNeedReInputName);
 
-	Character::GetInstance(Name);
+	BattlePlayer = Character::GetInstance(Name);
 }
 
 Monster* GameManager::GenerateMonster(int Level)
