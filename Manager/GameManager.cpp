@@ -1,4 +1,7 @@
 ﻿#include "GameManager.h"
+
+#include <cassert>
+
 #include "../Monster/Monster.h"
 #include "../Monster/BossMonster.h"
 #include "../Player/Character.h"
@@ -129,8 +132,7 @@ bool GameManager::Battle(Character* Player)
 {
 	InitBattle(Player);
 
-	if (CanBattle() == false)
-		return;
+	assert(CanBattle());
 
 	StartBattle();
 	bool bNeedContinue = EndBattle();
