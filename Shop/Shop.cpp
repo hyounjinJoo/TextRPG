@@ -163,5 +163,25 @@ void Shop::BuyItem(int Index, Character* Player)
 
 void Shop::SellItem(int Index, Character* Player)
 {
+	std::vector<Item*>& Inventory = Player->GetInventory();
 
+	// 유효하지 않은 인덱스 체크
+	if (Index < 0 || Index >= Inventory.size())
+	{
+		std::cout << "|유효하지 않은 아이템 번호입니다! 다시 선택해주세요.\n";
+		return;
+	}
+
+	// 판매 아이템 처리
+	Item* itemToSell = Inventory[Index];
+	int sellPrice = static_cast<int>(ItemPrices[Index] * 0.6);
+
+	// 골드 추가 및 아이템 제거
+	Player->SetGold(Player->GetGold() + sellPrice);
+	Inventory.erase(Inventory.begin() + Index);
+
+	std::cout << "| " << itemToSell->GetName() << "을(를) " << sellPrice << " 골드에 판매했습니다!\n";
+	delete itemToSell; // 메모리 해제
+
+	std::cout << "| 상점 메뉴로 돌아갑니다.\n";
 }
