@@ -79,4 +79,8 @@ Item* BossMonster::DropItem()
             return new AttackBoost();
         }
     }
+    else
+    {
+        return nullptr;
+    }
 }

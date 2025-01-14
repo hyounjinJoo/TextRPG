@@ -78,4 +78,8 @@ Item* Goblin::DropItem()
             return new AttackBoost();
         }
     }
+    else
+    {
+        return nullptr;
+    }
 }

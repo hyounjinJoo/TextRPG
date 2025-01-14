@@ -72,4 +72,8 @@ Item* Troll::DropItem()
     {
         return new HealthPotion();
     }
+    else
+    {
+        return nullptr;
+    }
 }
