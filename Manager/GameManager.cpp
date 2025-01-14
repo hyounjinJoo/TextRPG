@@ -203,18 +203,11 @@ bool GameManager::EndBattle()
 	// 배틀 종료 후, 턴별 배틀 정보를 출력합니다.
 	DisplayBattleInfos();
 
-	// 몬스터 사망 처리
-	if (BattleMonster)
-	{
-		delete BattleMonster;
-		BattleMonster = nullptr;
-	}
-
 	// 배틀 결과에 따라 메시지를 출력합니다.
 	DELAY_MILLI(1500);
 	bool bNeedContinue = ReturnAndDisplayBattleResult();
 	// 플레이어 상태를 화면에 출력합니다.
-	if (BattleResult == EBattleResult::PlayerWin)
+	if (bNeedContinue && BattleResult == EBattleResult::PlayerWin)
 	{
 		DisplayPlayerStatus(BattlePlayer);
 	}
@@ -478,15 +471,31 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 
 bool GameManager::ReturnAndDisplayBattleResult()
 {
+	bool bBattleMonsterIsBoss = false;
+	// 몬스터 사망 처리
+	if (BattleMonster && BattleResult == EBattleResult::PlayerWin)
+	{
+		if(dynamic_cast<BossMonster*>(BattleMonster))
+		{
+			bBattleMonsterIsBoss = true;
+		}
+
+		delete BattleMonster;
+		BattleMonster = nullptr;
+	}
+
 	system("cls");
-	std::cout << "==========================전투 결과==========================" << std::endl;
+	if (!bBattleMonsterIsBoss)
+	{
+		std::cout << "==========================전투 결과==========================" << std::endl;
+	}
 
 	bool bResult = false;
 	switch (BattleResult)
 	{
 		case EBattleResult::PlayerWin:
 			// 보스 몬스터일 경우 
-			if (dynamic_cast<BossMonster*>(BattleMonster))
+			if (bBattleMonsterIsBoss)
 			{
 				std::cout << "==========================게임 승리!==========================" << std::endl;
 				std::cout << "| 태어난 김에 보스까지 잡았으니 이제 백수가 되었습니다. 이제 현생을 사십시오." << std::endl;
@@ -603,8 +612,6 @@ void GameManager::VisitShop(Character* Player)
 		default:
 			std::cout << "Y 또는 N을 입력해 주세요." << std::endl;
 			break;
-		}
-		// 입력 버퍼를 비웁니다.
-		
+		}		
 	}
 }
