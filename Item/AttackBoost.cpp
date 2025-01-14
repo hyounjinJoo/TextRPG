@@ -28,6 +28,6 @@ void AttackBoost::Use(Character* Player)
     int AfterDamage = Player->GetAttack() + AttackIncrease;
     Player->SetAttack(AfterDamage);
 
-    std::cout << Name << "을(를) 사용 했습니다." << std::endl;
-    std::cout << Player->GetName() << "의 현재 공격력 : " << Player->GetAttack() << std::endl;
+    std::cout << "| " << Name << "을(를) 사용 했습니다." << std::endl;
+    std::cout << "| " << Player->GetName() << "의 현재 공격력 : " << Player->GetAttack() << std::endl;
 }
