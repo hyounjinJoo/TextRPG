@@ -126,12 +126,12 @@ bool GameManager::CanBattle()
 {
 	if (BattleMonster == nullptr)
 	{
-		std::cout << "배틀 몬스터가 존재하지 않습니다!" << std::endl;
+		std::cout << "|배틀 몬스터가 존재하지 않습니다!" << std::endl;
 		return false;
 	}
 	if (BattlePlayer == nullptr)
 	{
-		std::cout << "현재 배틀에 참여한 플레이어가 없습니다!" << std::endl;
+		std::cout << "|현재 배틀에 참여한 플레이어가 없습니다!" << std::endl;
 		return false;
 	}
 
@@ -391,7 +391,7 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 	// 첫 턴에는 몬스터의 정보를 출력합니다.
 	if (TurnIdx == 1)
 	{
-		std::cout << "몬스터" << BattlePlayer->GetName() << " 등장! 체력: " << PrevInfo.MonsterHP << ", 공격력: " << PrevInfo.MonsterAttack << std::endl;
+		std::cout << "|몬스터" << BattlePlayer->GetName() << " 등장! 체력: " << PrevInfo.MonsterHP << ", 공격력: " << PrevInfo.MonsterAttack << std::endl;
 		return;
 	}
 
@@ -405,30 +405,30 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 				
 				if (CurInfo.UsePotionType == ITEM_IDX_HEALTHPOTION)
 				{
-					std::cout << "플레이어의 현재 체력 : " << CurInfo.PlayerHP << " / " << BattlePlayer->GetMaxHealth() << std::endl;
+					std::cout << "|플레이어의 현재 체력 : " << CurInfo.PlayerHP << " / " << BattlePlayer->GetMaxHealth() << std::endl;
 				}
 				else if (CurInfo.UsePotionType == ITEM_IDX_ATTACKBOOST)
 				{
-					std::cout << "플레이어의 공격력 : " << CurInfo.PlayerAttack << std::endl;
+					std::cout << "|플레이어의 공격력 : " << CurInfo.PlayerAttack << std::endl;
 				}
 			}
 			if (CurInfo.MonsterHP > 0)
 			{
-				std::cout << BattlePlayer->GetName() << "이(가) " << BattleMonster->GetName() << "을(를) 공격합니다! " << BattleMonster->GetName() << " 체력: " << CurInfo.MonsterHP << std::endl;
+				std::cout << "|" << BattlePlayer->GetName() << "이(가) " << BattleMonster->GetName() << "을(를) 공격합니다! " << BattleMonster->GetName() << " 체력: " << CurInfo.MonsterHP << std::endl;
 			}
 			else
 			{
-				std::cout << BattlePlayer->GetName() << "이(가) " << BattleMonster->GetName() << "을(를) 공격합니다! " << BattleMonster->GetName() << " 처치!" << std::endl;
+				std::cout << "|" << BattlePlayer->GetName() << "이(가) " << BattleMonster->GetName() << "을(를) 공격합니다! " << BattleMonster->GetName() << " 처치!" << std::endl;
 			}
 			break;
 		case EBattleTurn::MonsterTurn:
 			if (CurInfo.PlayerHP > 0)
 			{
-				std::cout << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다!" << BattlePlayer->GetName() << "체력: " << CurInfo.PlayerHP << " / " << BattlePlayer->GetMaxHealth() << std::endl;
+				std::cout << "|" << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다!" << BattlePlayer->GetName() << "체력: " << CurInfo.PlayerHP << " / " << BattlePlayer->GetMaxHealth() << std::endl;
 			}
 			else
 				{
-				std::cout << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다!" << BattlePlayer->GetName() << "체력: " << PrevInfo.PlayerHP << "->" << CurInfo.PlayerHP << std::endl;
+				std::cout << "|" << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다!" << BattlePlayer->GetName() << "체력: " << PrevInfo.PlayerHP << "->" << CurInfo.PlayerHP << std::endl;
 			}
 			break;
 		default:
@@ -452,12 +452,12 @@ void GameManager::DisplayBattleResult()
 			// 일반 몬스터일 경우
 			else
 			{
-				std::cout << BattlePlayer->GetName() << "이(가) " << BattleReward.Experience << "EXP와 " << BattleReward.Gold << " 골드를 획득했습니다. " << std::endl;
-				std::cout << "현재 EXP:" << BattlePlayer->GetExperience() << " / 100 골드: " << BattlePlayer->GetGold() << std::endl;
+				std::cout << "|" << BattlePlayer->GetName() << "이(가) " << BattleReward.Experience << "EXP와 " << BattleReward.Gold << " 골드를 획득했습니다. " << std::endl;
+				std::cout << "|현재 EXP:" << BattlePlayer->GetExperience() << " / 100 골드: " << BattlePlayer->GetGold() << std::endl;
 			}
 			break;
 		case EBattleResult::MonsterWin:
-			std::cout << BattlePlayer->GetName() << "이(가) 사망했습니다. 게임 오버!" << std::endl;
+			std::cout << "|" << BattlePlayer->GetName() << "이(가) 사망했습니다. 게임 오버!" << std::endl;
 			break;
 		default:
 			break;
@@ -528,7 +528,6 @@ void GameManager::EndCredits()
 	std::cout << std::endl;
 }
 
-
 // 상점 방문 구현
 void GameManager::VisitShop(Character* Player)
 {
@@ -539,7 +538,7 @@ void GameManager::VisitShop(Character* Player)
 
 	while (true)
 	{
-		std::cout << "| 상점을 방문하시겠습니까? (Y/N) : ";
+		std::cout << "|상점을 방문하시겠습니까? (Y/N) : ";
 
 		YesNo = std::cin.get();
 		YesNo = std::toupper(YesNo);
