@@ -18,7 +18,10 @@ Shop::~Shop()
 	for (Item* item : AvailableItems)
 	{
 		delete item;
+		item = nullptr;
 	}
+
+	AvailableItems.clear();
 }
 
 void Shop::DisplayItems(Character* Player)
