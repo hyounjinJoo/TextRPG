@@ -515,6 +515,7 @@ bool GameManager::ReturnAndDisplayBattleResult()
 				std::cout << "| 태어난 김에 보스까지 잡았으니 이제 백수가 되었습니다.\n";
 				std::cout << "| 이제 현생을 사십시오.\n";
 				WaitAnyKeyPressed();
+				EndCredits();
 			}
 			// 일반 몬스터일 경우
 			else
@@ -577,25 +578,36 @@ void GameManager::DisplayPlayerStatus(Character* Player)
 void GameManager::EndCredits()
 {
 	// 멤버 역할과 이름.
+	std::cout << "[Credit]\n";
 	std::vector<std::string> Members = {
-	"Poject Manager : 주현진",
-	"Game Manager : 김동현",
-	"Shop 제작 : 심홍기",
-	"Character 제작 : 최지한",
-	"Item 제작 : 김건우",
-	"Monster 제작 : 김도훈" };
+	"| Poject Manager : 주현진",
+	"| Game Manager : 김동현",
+	"| Shop 제작 : 심홍기",
+	"| Character 제작 : 최지한",
+	"| Item 제작 : 김건우",
+	"| Monster 제작 : 김도훈",
+	"| 제작 지원 도움 및 영혼의 구심점 및 그저 왕 : 최민성 튜터님",
+	"| 총 제작기간 : 25.01.10 ~ 25.01.16(5일)",
+	"[제작 환경]",
+	"| IDE : MicroSoft Visual Studio Community 2022",
+	"| Language : ISO C++14 Standard",
+	"| Source Control : Git & GirHub",
+	"| 작업 기록 : Notion",
+	"| 작업 장소 : 자택, Zep",
+	"| Special Thanks : Google.com"};
 
 	// 각 멤버별로 한 글자씩 출력하고 다음 멤버 출력시 줄바꿈.
 	for (const std::string& Member : Members) {  // 벡터의 각 요소 순회
 		for (char C : Member) {				// 문자열의 각 문자 순회
 			std::cout << C;                 // 한 글자씩 출력
 			std::cout.flush();              // 버퍼를 강제로 비우기
-			std::this_thread::sleep_for(std::chrono::milliseconds(150));    // 150ms 대기
+			std::this_thread::sleep_for(std::chrono::milliseconds(50));    // 150ms 대기
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(200));    // 줄 간격 대기
-		std::cout << std::endl; // 줄 바꿈
+		std::this_thread::sleep_for(std::chrono::milliseconds(150));    // 줄 간격 대기
+		std::cout << "\n"; // 줄 바꿈
 	}
-	std::cout << std::endl;
+	std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n";
+	WaitAnyKeyPressed();
 }
 
 // 상점 방문 구현
