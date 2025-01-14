@@ -35,6 +35,53 @@ void GameManager::Init()
 	GameShop = new Shop();
 }
 
+void GameManager::CreateCharacter()
+{
+	std::cout << "==========================전설의 시작==========================" << "\n";
+	std::cout << "| 이름에는 공백이나 특수문자가 포함될 수 없습니다." << "\n";
+	std::cout << "| 캐릭터 이름을 입력하세요 : ";
+	std::string Name;
+	bool bNeedReInputName = false;
+	do
+	{
+		std::getline(std::cin, Name);
+		size_t Length = Name.length();
+		char Char = NULL;
+		bNeedReInputName = false;
+
+		if (Name.empty())
+		{
+			std::cout << "| 이름의 길이가 0일 수 없습니다. 캐릭터 이름을 다시 입력하세요 : ";
+			bNeedReInputName = true;
+			continue;
+		}
+
+		for (int IDX = 0; IDX < Length; ++IDX)
+		{
+			Char = Name[IDX];
+			if (Char == ' ' || Char == '%' || Char == '/' || Char == '!' || Char == '@' || Char == '#'
+				|| Char == '$' || Char == '^' || Char == '&' || Char == '*' || Char == '(' || Char == ')'
+				|| Char == '-' || Char == '=' || Char == '+' || Char == '`' || Char == '~' || Char == '['
+				|| Char == ']' || Char == '{' || Char == '}' || Char == '\\' || Char == ';' || Char == ':'
+				|| Char == '\'' || Char == '\"' || Char == ',' || Char == '.' || Char == '<' || Char == '>'
+				|| Char == '?' || Char == '_')
+			{
+				std::cout << "| 잘못된 입력입니다. 캐릭터 이름을 다시 입력하세요 : ";
+				Name = std::string();
+				bNeedReInputName = true;
+				break;
+			}
+		}
+
+		if (!bNeedReInputName)
+		{
+			break;
+		}
+	} while (bNeedReInputName);
+
+	Character::GetInstance(Name);
+}
+
 Monster* GameManager::GenerateMonster(int Level)
 {
 	const int MonsterCount = 3;
