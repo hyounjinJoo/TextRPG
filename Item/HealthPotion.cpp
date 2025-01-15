@@ -24,16 +24,17 @@ std::string HealthPotion::GetItemDescription() const
     return StrItemDescription;
 }
 
-void HealthPotion::Use(Character* Player, GameManager* manager)
+bool HealthPotion::Use(Character* Player, GameManager* manager)
 {
     int CurrentHP = Player->GetHealth();
     int HealthHP = CurrentHP + HealthRestore;;
 
+    // 사용할 필요가 없으므로 false return
     if (CurrentHP >= Player->GetMaxHealth())
     {
         manager->PushItemUsingText("| " + Player->GetName() + "은(는) 회복 물약을 먹을 필요가 없습니다.\n");
         manager->PushItemUsingText("| 사용이 취소 되었습니다.\n");
-        return;
+        return false;
     }
 
     if (HealthHP > Player->GetMaxHealth())
@@ -48,4 +49,6 @@ void HealthPotion::Use(Character* Player, GameManager* manager)
         manager->PushItemUsingText("| " + Player->GetName() + "은(는) HP " + std::to_string(HealthRestore) + " 을 회복했습니다.\n");
         Player->SetHealth(HealthHP);
     }
+
+    return true;
 }

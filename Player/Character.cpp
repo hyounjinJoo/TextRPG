@@ -3,7 +3,7 @@
 
 Character* Character::Instance = nullptr;
 
-Character::Character(std::string Name) : Name(Name), Level(1), Health(0), MaxHealth(200), Attack(30), Experience(0), Gold(0)
+Character::Character(std::string Name) : Name(Name), Level(1), Health(0), MaxHealth(200), Attack(3000), Experience(0), Gold(0)
 {
     Health = MaxHealth;
     Inventory.resize(2);
@@ -83,7 +83,11 @@ void Character::UseItem(int Index, GameManager* manager)
         return;
     }
 
-    Inventory[Index]->Use(Instance, manager);
+    bool bNeedDeleteItem = Inventory[Index]->Use(Instance, manager);
+    if(!bNeedDeleteItem)
+    {
+        return;
+    }
 
     // Item 사용후 삭제, erase()를 사용하지 않으므로 반드시 아이템 획득 시에는 Item을 생성해서 넣어주시기 바랍니다.
     delete Inventory[Index];

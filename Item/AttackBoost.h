@@ -10,7 +10,7 @@ public:
 public:
     std::string GetName() const override;
     std::string GetItemDescription() const override;
-    void Use(Character* Player, class GameManager* manager) override;
+    bool Use(Character* Player, class GameManager* manager) override;
 
 private:
     std::string Name;
