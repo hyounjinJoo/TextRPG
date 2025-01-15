@@ -160,7 +160,7 @@ void Shop::BuyItem(int Index, Character* Player)
 	// 중복 확인: 인벤토리 순회하며 동일 아이템이 있는지 검사
 	for (Item* item : Inventory)
 	{
-		if (item == AvailableItems[Index]) // 동일 아이템인지 비교
+		if (item && item->GetName() == AvailableItems[Index]->GetName()) // 동일 아이템인지 비교
 		{
 			std::cout << "| 이미 이 아이템을 보유하고 있습니다. 구매할 수 없습니다!\n"; DELAY_MILLI(1000);
 			return;
@@ -199,10 +199,11 @@ void Shop::SellItem(int Index, Character* Player)
 {
 	std::vector<Item*>& Inventory = Player->GetInventory();
 
-	// 유효하지 않은 인덱스 체크
-	if (Index < 0 || Index >= Inventory.size() || false == Player->IsExistInInventory(Index))
+
+	// 유효하지 않은 인덱스 체크 및 아이템이 존재하지 않는 경우 
+	if (Index < 0 || Index >= Inventory.size() || Inventory[Index] == nullptr)
 	{
-		std::cout << "|유효하지 않은 아이템 번호입니다! 다시 선택해주세요.\n\n";
+		std::cout << "| 해당 아이템은 존재하지 않습니다! 다시 선택해주세요.\n";  DELAY_MILLI(1000);
 		return;
 	}
 
