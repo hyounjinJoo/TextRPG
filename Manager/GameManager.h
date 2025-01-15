@@ -14,7 +14,7 @@ class Shop;
 namespace
 {
 	#define ITEM_DROP_CHANCE 30
-	#define HEALTH_RECOVERY_THRESHOLD 40
+	#define HEALTH_RECOVERY_THRESHOLD 0.4f
 
 	enum EPotionType
 	{
