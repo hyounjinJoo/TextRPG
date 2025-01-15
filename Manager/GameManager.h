@@ -141,5 +141,5 @@ private:
 
 /* 진행 관련 */
 public:
-	void WaitAnyKeyPressed();
+	void WaitEnterKeyPressed();
 };

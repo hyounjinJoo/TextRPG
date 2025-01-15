@@ -20,7 +20,11 @@
 #define MAKE_ALERT() std::cout.flush();\
 					 std::cout<<'\a';\
 					 std::cout.flush();
-
+#define MIN_DURATION 50
+#define SHORT_DURATION 100
+#define DEFAULT_DURATION 200
+#define MID_DURATION 500
+#define LONG_DURATION 1000
 GameManager::GameManager()
 : BattlePlayer(nullptr), BattleMonster(nullptr)
 {
@@ -65,11 +69,11 @@ void GameManager::CreateCharacter()
 	for(size_t IDX = 0; IDX < Length; ++IDX)
 	{
 		std::cout << IntroText[IDX];
-		DELAY_MILLI(50);
+		DELAY_MILLI(MIN_DURATION);
 	}
 	std::cout << "\n";
 
-	std::cout << "| 이름에는 공백이나 특수문자가 포함될 수 없습니다." << "\n";	DELAY_MILLI(200);
+	std::cout << "| 이름에는 공백이나 특수문자가 포함될 수 없습니다." << "\n";	DELAY_MILLI(DEFAULT_DURATION);
 	std::cout << "| 캐릭터 이름을 입력하세요 : ";
 	std::string Name;
 	bool bNeedReInputName = false;
@@ -112,10 +116,10 @@ void GameManager::CreateCharacter()
 
 	BattlePlayer = Character::GetInstance(Name);
 
-	DELAY_MILLI(200);
+	DELAY_MILLI(DEFAULT_DURATION);
 	std::cout << "| " << BattlePlayer->GetName() << "이(가) 태어났습니다! 레벨 : " << BattlePlayer->GetLevel()
 		<< " 체력: " << BattlePlayer->GetHealth() << " 공격력: " << BattlePlayer->GetAttack() << "\n";
-	WaitAnyKeyPressed();
+	WaitEnterKeyPressed();
 }
 
 Monster* GameManager::GenerateMonster(int Level)
@@ -358,7 +362,7 @@ Monster* GameManager::CreateBattleMonster(int PlayerLevel)
 		CreatedMonster = GenerateMonster(PlayerLevel);
 	}
 
-	DELAY_MILLI(200);
+	DELAY_MILLI(DEFAULT_DURATION);
 	return CreatedMonster;
 }
 
@@ -429,7 +433,7 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 	if (TurnIdx == 1)
 	{
 		std::cout << "| 몬스터 : " << BattleMonster->GetName() << " 등장! 체력: " << PrevInfo.MonsterHP << ", 공격력: " << PrevInfo.MonsterAttack << std::endl;
-		DELAY_MILLI(1500);
+		DELAY_MILLI(MID_DURATION);
 	}
 
 	switch (CurInfo.BattleTurn)
@@ -439,23 +443,23 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 			if (CurInfo.UsePotionType != EPotionType::NONE)
 			{
 				std::cout << "| " << BattlePlayer->GetName() << "이(가) " << CurInfo.UseItemName << "을(를) 사용합니다! " << CurInfo.UseItemDescription << "!" << std::endl;
-				DELAY_MILLI(1000);
+				DELAY_MILLI(LONG_DURATION);
 				while (!BattleItemUsingTexts.empty())
 				{
 					std::cout << BattleItemUsingTexts.front();
 					BattleItemUsingTexts.pop();
-					DELAY_MILLI(1500);
+					DELAY_MILLI(MID_DURATION);
 				}
 
 				if (CurInfo.UsePotionType == ITEM_IDX_HEALTHPOTION)
 				{
 					std::cout << "| 플레이어의 현재 체력 : " << CurInfo.PlayerHP << " / " << BattlePlayer->GetMaxHealth() << std::endl;
-					DELAY_MILLI(1500);
+					DELAY_MILLI(MID_DURATION);
 				}
 				else if (CurInfo.UsePotionType == ITEM_IDX_ATTACKBOOST)
 				{
 					std::cout << "| 플레이어의 공격력 : " << CurInfo.PlayerAttack << std::endl;
-					DELAY_MILLI(1500);
+					DELAY_MILLI(MID_DURATION);
 				}
 			}
 			if (CurInfo.MonsterHP > 0)
@@ -467,7 +471,7 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 				std::cout << "| " << BattlePlayer->GetName() << "이(가) " << BattleMonster->GetName() << "을(를) 공격합니다! " << BattleMonster->GetName() << " 처치!" << std::endl;
 			}
 			MAKE_ALERT();
-			DELAY_MILLI(1500);
+			DELAY_MILLI(MID_DURATION);
 			break;
 		case EBattleTurn::MonsterTurn:
 			if (CurInfo.PlayerHP > 0)
@@ -478,7 +482,7 @@ void GameManager::DisplayBattleInfo(const FBattleTurnInfo& PrevInfo, const FBatt
 				{
 				std::cout << "| " << BattleMonster->GetName() << "이(가) " << BattlePlayer->GetName() << "을(를) 공격합니다! " << BattlePlayer->GetName() << " 체력: " << PrevInfo.PlayerHP << "->" << CurInfo.PlayerHP << std::endl;
 			}
-			DELAY_MILLI(1500);
+			DELAY_MILLI(MID_DURATION);
 			break;
 		default:
 			break;
@@ -501,7 +505,7 @@ bool GameManager::ReturnAndDisplayBattleResult()
 		delete BattleMonster;
 		BattleMonster = nullptr;
 
-		WaitAnyKeyPressed();
+		WaitEnterKeyPressed();
 	}
 
 	system("cls");
@@ -521,6 +525,7 @@ bool GameManager::ReturnAndDisplayBattleResult()
 				std::cout << "| 태어난 김에 보스까지 잡았으니 이제 백수가 되었습니다.\n";
 				std::cout << "| 이제 현생을 사십시오.\n";
 				WaitAnyKeyPressed();
+				WaitEnterKeyPressed();
 				EndCredits();
 			}
 			// 일반 몬스터일 경우
@@ -586,14 +591,14 @@ void GameManager::EndCredits()
 	// 멤버 역할과 이름.
 	std::cout << "[Credit]\n";
 	std::vector<std::string> Members = {
-	"| Poject Manager : 주현진",
+	"| Project Manager : 주현진",
 	"| Game Manager 제작 : 김동현",
 	"| Shop 제작 : 심홍기",
 	"| Character 제작 : 최지한",
 	"| Item 제작 : 김건우",
 	"| Monster 제작 : 김도훈",
 	"| 제작 지원 도움 및 영혼의 구심점 및 그저 왕 : 최민성 튜터님",
-	"| 총 제작기간 : 25.01.10 ~ 25.01.16(5일)",
+	"| 총 제작기간 : 25.01.10 ~ 25.01.16(5일)\n",
 	"[제작 환경]",
 	"| IDE : MicroSoft Visual Studio Community 2022",
 	"| Language : ISO C++14 Standard",
@@ -606,6 +611,11 @@ void GameManager::EndCredits()
 	for (const std::string& Member : Members) {  // 벡터의 각 요소 순회
 		for (char C : Member) {				// 문자열의 각 문자 순회
 			std::cout << C;                 // 한 글자씩 출력
+			if (' ' != C && '\n' != C)
+			{
+				Beep(520, 50);
+				Beep(340, 10);
+			}
 			std::cout.flush();              // 버퍼를 강제로 비우기
 			std::this_thread::sleep_for(std::chrono::milliseconds(50));    // 150ms 대기
 		}
@@ -613,7 +623,7 @@ void GameManager::EndCredits()
 		std::cout << "\n"; // 줄 바꿈
 	}
 	std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n";
-	WaitAnyKeyPressed();
+	WaitEnterKeyPressed();
 }
 
 // 상점 방문 구현
@@ -650,17 +660,17 @@ void GameManager::VisitShop(Character* Player)
 		else
 		{
 			std::cout << "| Y 또는 N을 입력해 주세요." << std::endl;
-			DELAY_MILLI(1000);
+			DELAY_MILLI(LONG_DURATION);
 			system("cls");
 			if(EasterEgg++ >= haha)
 			{
 				EasterEgg = 1;
 				std::cout << "히히 오줌발싸!\n";
-				DELAY_MILLI(100);
+				DELAY_MILLI(SHORT_DURATION);
 				system("cls");
 				PrintSTR = EasterEggSTR;
 				std::cout << PrintSTR;
-				DELAY_MILLI(200);
+				DELAY_MILLI(DEFAULT_DURATION);
 				system("cls");
 				PrintSTR = NormalSTR;
 			}
@@ -672,7 +682,7 @@ void GameManager::VisitShop(Character* Player)
 	}
 }
 
-void GameManager::WaitAnyKeyPressed()
+void GameManager::WaitEnterKeyPressed()
 {
 	std::cout << "| 계속하려면 엔터키를 입력하세요";
 
@@ -683,7 +693,7 @@ void GameManager::WaitAnyKeyPressed()
 		if(Count++ < Limit)
 			std::cout << ".";
 
-		DELAY_MILLI(100)
+		DELAY_MILLI(SHORT_DURATION)
 		if(_kbhit() && _getch() == '\r')
 		{
 			system("cls");
