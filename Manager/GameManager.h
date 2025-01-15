@@ -3,6 +3,7 @@
 #include <thread> // EndCredits에서 sleep_for 사용
 #include <chrono> // EndCredits에서 시간 관련 기능
 #include <queue>
+#include <windows.h> // Beep 함수를 사용하기 위한 헤더 파일
 
 class Monster;
 class BossMonster;
@@ -85,10 +86,11 @@ public:
     void DisplayInventory(Character* Player);
 	void DisplayPlayerStatus(Character* Player);
 	void EndCredits(); // 엔딩 크레딧
+	void StartMusic(); // BGM 시작
 
 private:
     void Init();
-
+	void PlayMusic(); // BGM 재생
 /* 캐릭터 생성 */
 	void CreateCharacter();
 

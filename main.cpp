@@ -11,6 +11,7 @@ int main(int argc, char* argv[])
 {
 	GameManager* Manager = new GameManager();
 
+	Manager->StartMusic();
 	bool bNeedContinueBattle = true;
 	while(bNeedContinueBattle)
 	{
