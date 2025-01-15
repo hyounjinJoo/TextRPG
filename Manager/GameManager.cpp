@@ -51,7 +51,12 @@ GameManager::~GameManager()
 	{
 		delete BattlePlayer;
 		BattlePlayer = nullptr;
-}
+	}
+
+	if(musicThread && musicThread->joinable())
+	{
+		musicThread->join();
+	}
 }
 
 void GameManager::Init()
@@ -524,7 +529,7 @@ bool GameManager::ReturnAndDisplayBattleResult()
 				std::cout << "==========================게임 승리!==========================" << std::endl;
 				std::cout << "| 태어난 김에 보스까지 잡았으니 이제 백수가 되었습니다.\n";
 				std::cout << "| 이제 현생을 사십시오.\n";
-				WaitAnyKeyPressed();
+				StopMusic();
 				WaitEnterKeyPressed();
 				EndCredits();
 			}
@@ -537,7 +542,23 @@ bool GameManager::ReturnAndDisplayBattleResult()
 			}
 			break;
 		case EBattleResult::MonsterWin:
-			std::cout << "| " << BattlePlayer->GetName() << "이(가) 사망했습니다. 게임 오버!" << std::endl;
+			{
+				std::string GameOverSTR = BattlePlayer->GetName() + "이(가) 사망했습니다. 게임 오버!\n";
+				size_t Length = GameOverSTR.length();
+				UINT DefaultMilli = 100;
+				for (size_t IDX = 0; IDX < Length; ++IDX)
+				{
+					std::cout << GameOverSTR[IDX];
+					DELAY_MILLI(DefaultMilli);
+				}
+
+				for(int Iter = 0; Iter < 20; ++Iter)
+				{
+					std::cout << "\n";
+				}
+				StopMusic();
+				WaitEnterKeyPressed();
+			}
 			break;
 		default:
 			break;
@@ -703,30 +724,34 @@ void GameManager::WaitEnterKeyPressed()
 }
 
 void GameManager::StartMusic() {
-	std::thread musicThread(&GameManager::PlayMusic, this); // playMusic을 별도 스레드에서 실행
-	musicThread.detach(); // 메인 스레드와 독립적으로 실행
+	musicThread = std::make_shared<std::thread>(&GameManager::PlayMusic, this); // playMusic을 별도 스레드에서 실행
 }
 
 // Zelda - Song of Time
 void GameManager::PlayMusic() {
-	while (true) { // 무한 반복
-		Beep(880, 500);  // A5 1-2
-		Beep(587, 1000);  // D5 1
-		Beep(698, 500);  // F5 1-2
-		Beep(880, 500);  // A5 1-2
-		Beep(587, 1000);  // D5 1
-		Beep(698, 500);  // F5 1-2
-		Beep(880, 250);  // A5 1-4
+	while (!stopMusicThread.load()) { // 무한 반복
+		Beep(880, 400);  // A5 1-2
+		Beep(587, 900);  // D5 1
+		Beep(698, 400);  // F5 1-2
+		Beep(880, 400);  // A5 1-2
+		Beep(587, 900);  // D5 1
+		Beep(698, 400);  // F5 1-2
+		Beep(880, 150);  // A5 1-4
 		Beep(1046, 250); // C6 1-4
-		Beep(987, 500);  // B5 1-2
-		Beep(783, 500);  // G5 1-2
-		Beep(698, 250);  // F5 1-4
+		Beep(987, 400);  // B5 1-2
+		Beep(783, 400);  // G5 1-2
+		Beep(698, 150);  // F5 1-4
 		Beep(783, 250);  // G5 1-4
-		Beep(880, 500);  // A5 1-2
-		Beep(587, 500);  // D5 1
-		Beep(523, 250);  // C5 1-4
-		Beep(659, 250);  // E5 1-4
-		Beep(587, 850);  // D5 3-4
-		Sleep(150);
+		Beep(880, 400);  // A5 1-2
+		Beep(587, 400);  // D5 1
+		Beep(523, 150);  // C5 1-4
+		Beep(659, 150);  // E5 1-4
+		Beep(587, 950);  // D5 3-4
+		Sleep(800);
 	}
+}
+
+void GameManager::StopMusic()
+{
+	stopMusicThread.store(true);
 }
