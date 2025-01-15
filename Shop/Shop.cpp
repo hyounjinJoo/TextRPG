@@ -14,8 +14,8 @@ Shop::Shop()
 {
 	AvailableItems.push_back(new HealthPotion());
 	AvailableItems.push_back(new AttackBoost());
-	ItemPrices.push_back(10);	//HealthPotion 가격
-	ItemPrices.push_back(10);	//AttackBoost 가격
+	ItemPrices.push_back(25);	//HealthPotion 가격
+	ItemPrices.push_back(30);	//AttackBoost 가격
 }
 
 Shop::~Shop()
