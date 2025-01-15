@@ -587,7 +587,7 @@ void GameManager::EndCredits()
 	std::cout << "[Credit]\n";
 	std::vector<std::string> Members = {
 	"| Poject Manager : 주현진",
-	"| Game Manager : 김동현",
+	"| Game Manager 제작 : 김동현",
 	"| Shop 제작 : 심홍기",
 	"| Character 제작 : 최지한",
 	"| Item 제작 : 김건우",
