@@ -41,8 +41,15 @@ void Shop::DisplayItems(Character* Player)
 		std::cout << "| 3. 상점 나가기 \n";
 		std::cout << "| 어떤 행동을 하시겠습니까?:  ";
 
-		int Choice;
+		int Choice = 0;
+		std::cin.ignore();
 		std::cin >> Choice;
+		if (std::cin.fail())
+		{
+			Choice = INT_MAX;
+			std::cin.clear();
+			std::cin.ignore();
+		}
 
 		switch (Choice)
 		{
@@ -56,7 +63,8 @@ void Shop::DisplayItems(Character* Player)
 			std::cout<<"\n| 상점 이용을 종료합니다.\n";
 				return;
 		default:
-		std::cout << "| 다시 어떤 행동을 할지 선택하세요! \n\n";
+			std::cout << "| 다시 어떤 행동을 할지 선택하세요! \n\n";
+			DELAY_MILLI(500);
 			break;
 		}
 	}
@@ -83,8 +91,17 @@ void Shop::DisplayBuyMenu(Character* Player)
 		std::cout << "| 현재 보유 골드: " << Player->GetGold()<<" \n";
 		std::cout << "| 구매할 아이템 번호 입력: ";
 
-		int ItemIndex;
+		int ItemIndex = 0;
+		std::cin.clear();
+		std::cin.ignore();
 		std::cin >> ItemIndex;
+		if (std::cin.fail())
+		{
+			ItemIndex = INT_MAX;
+			std::cin.clear();
+			std::cin.ignore();
+		}
+
 
 		
 		// 1,2 외의 숫자를 눌렀을시 오류 메시지
@@ -95,6 +112,7 @@ void Shop::DisplayBuyMenu(Character* Player)
 		else if (ItemIndex < 1 || ItemIndex > AvailableItems.size()) 
 		{
 			std::cout << "\n| 다시 어떤 아이템을 구매할 지 선택하세요!\n\n";
+			DELAY_MILLI(500);
 			continue;
 		}
 		BuyItem(ItemIndex - 1, Player);
@@ -135,8 +153,16 @@ void Shop::DisplaySellMenu(Character* Player)
 		std::cout << "| 0. 상점메뉴로 이동 \n";
 		std::cout << "| 판매할 아이템 번호 입력: ";
 
-		int ItemIndex;
+		int ItemIndex = 0;
+		std::cin.clear();
 		std::cin >> ItemIndex;
+		if (std::cin.fail())
+		{
+			ItemIndex = INT_MAX;
+			std::cin.clear();
+			std::cin.ignore();
+		}
+
 		if (ItemIndex == 0)
 		{
 			return;
@@ -144,6 +170,7 @@ void Shop::DisplaySellMenu(Character* Player)
 		else if (ItemIndex < 1 || ItemIndex > Inventory.size())
 		{
 			std::cout << "| 다시 어떤 아이템을 팔지 선택해주세요!\n\n";
+			DELAY_MILLI(500);
 			continue;
 		}
 
