@@ -21,13 +21,16 @@ Orc::Orc(int Level) : Name("오크") // 오크 : 전투력이 강하며 공격�
     Attack = Level * RandomAttack;
 
     // 오크 생성시 출력되는 메시지.
-    cout << "와아아악!!" << endl;
+    cout << "\n| 오크 : 와아아악!!\n" << endl;
 }
 
 Orc::~Orc()
 {
     // 오크 소멸시 출력되는 메시지.
-    cout << "끄어억" << endl;
+    if (Health <= 0)
+    {
+        cout << "\n| 오크 : 끄어억\n" << endl;
+    }
 }
 
 const std::string& Orc::GetName() const
@@ -70,5 +73,9 @@ Item* Orc::DropItem()
     if (Drop <= 30)
     {
         return new AttackBoost();
+    }
+    else
+    {
+        return nullptr;
     }
 }

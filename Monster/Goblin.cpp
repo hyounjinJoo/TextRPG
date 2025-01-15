@@ -21,13 +21,16 @@ Goblin::Goblin(int Level) : Name("고블린")
     Attack = Level * RandomAttack;
 
     // 고블린 생성시 출력되는 메시지.
-    cout << "낄낄낄" << endl;
+    cout << "\n| 고블린 : 낄낄낄\n" << endl;
 }
 
 Goblin::~Goblin()
 {
     // 고블린 소멸시 출력되는 메시지.
-    cout << "끼에엑" << endl;
+    if (Health <= 0)
+    {
+        cout << "\n| 고블린 : 끼에엑\n" << endl;
+    }
 }
 
 const std::string& Goblin::GetName() const
@@ -77,5 +80,9 @@ Item* Goblin::DropItem()
         {
             return new AttackBoost();
         }
+    }
+    else
+    {
+        return nullptr;
     }
 }

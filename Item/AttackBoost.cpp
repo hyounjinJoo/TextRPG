@@ -1,4 +1,5 @@
 ﻿#include "AttackBoost.h"
+#include "../Manager/GameManager.h"
 
 AttackBoost::AttackBoost()
 {
@@ -23,11 +24,13 @@ std::string AttackBoost::GetItemDescription() const
     return StrItemDescription;
 }
 
-void AttackBoost::Use(Character* Player)
+bool AttackBoost::Use(Character* Player, GameManager* manager)
 {
     int AfterDamage = Player->GetAttack() + AttackIncrease;
     Player->SetAttack(AfterDamage);
 
-    std::cout << Name << "을(를) 사용 했습니다." << std::endl;
-    std::cout << Player->GetName() << "의 현재 공격력 : " << Player->GetAttack() << std::endl;
+    manager->PushItemUsingText("| " + Name + "을(를) 사용 했습니다.\n");
+    manager->PushItemUsingText("| " + Player->GetName() + "의 현재 공격력 : " + std::to_string(Player->GetAttack()) + "\n");
+
+    return true;
 }
