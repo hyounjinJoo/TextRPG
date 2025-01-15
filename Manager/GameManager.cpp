@@ -399,7 +399,7 @@ void GameManager::TargetAttack(Character* Attacker, Monster* Defender)
 void GameManager::TargetAttack(Monster* Attacker, Character* Defender)
 {
 	// 몬스터 공격, 플레이어의 HP를 수정합니다
-	int CurrentHealth = std::max(0, Defender->GetHealth() - Attacker->GetAttack());
+	int CurrentHealth = (std::max)(0, Defender->GetHealth() - Attacker->GetAttack());
 	Defender->SetHealth(CurrentHealth);
 }
 
@@ -689,5 +689,34 @@ void GameManager::WaitAnyKeyPressed()
 			system("cls");
 			break;
 		}
+	}
+}
+
+void GameManager::StartMusic() {
+	std::thread musicThread(&GameManager::PlayMusic, this); // playMusic을 별도 스레드에서 실행
+	musicThread.detach(); // 메인 스레드와 독립적으로 실행
+}
+
+// Zelda - Song of Time
+void GameManager::PlayMusic() {
+	while (true) { // 무한 반복
+		Beep(880, 500);  // A5 1-2
+		Beep(587, 1000);  // D5 1
+		Beep(698, 500);  // F5 1-2
+		Beep(880, 500);  // A5 1-2
+		Beep(587, 1000);  // D5 1
+		Beep(698, 500);  // F5 1-2
+		Beep(880, 250);  // A5 1-4
+		Beep(1046, 250); // C6 1-4
+		Beep(987, 500);  // B5 1-2
+		Beep(783, 500);  // G5 1-2
+		Beep(698, 250);  // F5 1-4
+		Beep(783, 250);  // G5 1-4
+		Beep(880, 500);  // A5 1-2
+		Beep(587, 500);  // D5 1
+		Beep(523, 250);  // C5 1-4
+		Beep(659, 250);  // E5 1-4
+		Beep(587, 850);  // D5 3-4
+		Sleep(150);
 	}
 }
