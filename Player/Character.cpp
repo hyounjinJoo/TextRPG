@@ -1,14 +1,28 @@
 ﻿#include "Character.h"
+#include "../Manager/GameManager.h"
 
 Character* Character::Instance = nullptr;
 
-Character::Character(std::string Name) : Name(Name), Level(1), Health(0), MaxHealth(200), Attack(30), Experience(0), Gold(0)
+Character::Character(std::string Name) : Name(Name), Level(1), Health(0), MaxHealth(200), Attack(3000), Experience(0), Gold(0)
 {
     Health = MaxHealth;
+    Inventory.resize(2);
 }
 
 Character::~Character()
 {
+    if(Instance)
+    {
+        Instance = nullptr;
+    }
+
+    for (Item* item : Inventory)
+    {
+        delete item;
+        item = nullptr;
+    }
+
+    Inventory.clear();
 }
 
 void Character::DisplayStatus()
@@ -47,7 +61,7 @@ void Character::GetExperience(int AddExperience)                                
 
 // 250113 주현진 수정, Item 사용후 삭제, erase()를 사용하지 않으므로 반드시 아이템 획득 시에는 Item을 생성해서 넣어주시기 바랍니다.
 // 수정 이유 - 요구 사항 명세가 변경되었음.
-void Character::UseItem(int Index)
+void Character::UseItem(int Index, GameManager* manager)
 {
     // HealthPotion, AttackBoost의 범위를 넘어가는 경우에 대한 예외처리
     if(Index < 0 || 1 < Index)
@@ -55,7 +69,7 @@ void Character::UseItem(int Index)
         return;
     }
 
-    std::vector<Item*> Inventory = Instance->GetInventory();
+    std::vector<Item*>& Inventory = Instance->GetInventory();
 
     // Item이 없는 경우에 대한 예외처리
     if(Inventory.empty())
@@ -69,7 +83,11 @@ void Character::UseItem(int Index)
         return;
     }
 
-    Inventory[Index]->Use(Instance);
+    bool bNeedDeleteItem = Inventory[Index]->Use(Instance, manager);
+    if(!bNeedDeleteItem)
+    {
+        return;
+    }
 
     // Item 사용후 삭제, erase()를 사용하지 않으므로 반드시 아이템 획득 시에는 Item을 생성해서 넣어주시기 바랍니다.
     delete Inventory[Index];

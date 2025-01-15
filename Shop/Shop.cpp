@@ -1,10 +1,15 @@
 ﻿#include "Shop.h"
 
 #include <iostream>
+#include <thread>
+
 #include "../Player/Character.h"
 #include "../Item/HealthPotion.h" 
 #include "../Item/AttackBoost.h" 
-#include "../Item/Item.h" 
+#include "../Item/Item.h"
+
+#define DELAY_MILLI(x) std::this_thread::sleep_for(std::chrono::milliseconds(x));
+
 Shop::Shop()
 {
 	AvailableItems.push_back(new HealthPotion());
@@ -18,14 +23,18 @@ Shop::~Shop()
 	for (Item* item : AvailableItems)
 	{
 		delete item;
+		item = nullptr;
 	}
+
+	AvailableItems.clear();
 }
 
 void Shop::DisplayItems(Character* Player)
 {
 	while (true)
 	{
-		std::cout << "\n====== 상점에 오신걸 환영합니다! ======\n";
+		system("cls");
+		std::cout << "================== 상점에 오신걸 환영합니다! ================\n";
 		std::cout << "\n| 행동을 선택해주세요: \n";
 		std::cout << "| 1. 아이템 구매 \n";
 		std::cout << "| 2. 아이템 판매 \n";
@@ -57,7 +66,8 @@ void Shop::DisplayBuyMenu(Character* Player)
 {
 	while (true)
 	{
-		std::cout << "\n======구매 가능한 아이템 목록======\n";
+		system("cls");
+		std::cout << "================== 구매 가능한 아이템 목록 ==================\n";
 		for (int i = 0; i < AvailableItems.size(); i++)
 		{
 			Item* item = AvailableItems[i];
@@ -66,7 +76,7 @@ void Shop::DisplayBuyMenu(Character* Player)
 				<< " ("
 				<< item->GetItemDescription()
 				<< ") "
-				<< ": " << ItemPrices[i] << " 골드)";
+				<< ": " << ItemPrices[i] << " 골드)\n";
 
 		}
 		std::cout << "| 0. 상점메뉴로 이동 \n";
@@ -97,18 +107,25 @@ void Shop::DisplaySellMenu(Character* Player)
 {	
 	const std::vector<Item*>& Inventory = Player->GetInventory();
 
-	if (Inventory.empty())
-	{
-		std::cout << "\n| 현재 아이템이 없습니다!\n";
-		std::cout << "| 상점메뉴로 돌아갑니다!\n";
+	system("cls");
+	if (!Inventory[0] && !Inventory[1])
+	{		
+		std::cout << "| 현재 아이템이 없습니다!\n"; DELAY_MILLI(1000);
+		std::cout << "| 상점메뉴로 돌아갑니다!\n"; DELAY_MILLI(1000);
 		return;
 	}
 	while (true)
 	{
-		std::cout << "\n====== 판매 가능한 아이템 목록 ======\n";
+		std::cout << "================판매 가능한 아이템 목록================\n";
 		for (int i = 0; i < Inventory.size(); i++)
 		{
 			Item* item = Inventory[i];
+			if(!item)
+			{
+				std::cout << "| " << i + 1 << ". " << "인벤토리에 아이템이 없습니다.\n";
+				continue;
+			}
+
 			std::cout << "| " << i + 1 << ". "
 						<< item->GetName()
 						<< " - "
@@ -145,24 +162,37 @@ void Shop::BuyItem(int Index, Character* Player)
 	{
 		if (item == AvailableItems[Index]) // 동일 아이템인지 비교
 		{
-			std::cout << "| 이미 이 아이템을 보유하고 있습니다. 구매할 수 없습니다!\n";
+			std::cout << "| 이미 이 아이템을 보유하고 있습니다. 구매할 수 없습니다!\n"; DELAY_MILLI(1000);
 			return;
 		}
 	}
 	//골드 부족 확인
 	if (Player->GetGold() < ItemPrices[Index])
 	{
-		std::cout << "| 구매에 실패했습니다! 골드가 부족합니다! \n";
+		std::cout << "| 구매에 실패했습니다! 골드가 부족합니다! \n"; DELAY_MILLI(1000);
 		return;
 	}
 
 	// 골드 차감 및 인벤토리에 추가
 	Player->SetGold(Player->GetGold() - ItemPrices[Index]);
-	Player->GetInventory().push_back(AvailableItems[Index]);
+	Item* NewItem = nullptr;
+	switch(Index)
+	{
+	case 0 :
+		NewItem = new HealthPotion();
+		break;
+	case 1:
+		NewItem = new AttackBoost();
+		break;
+	default :
+		break;
+	}
 
-	std::cout << "| " << AvailableItems[Index]->GetName() << " 아이템을(를) 구매했습니다!\n";
-	std::cout << "| 남은 골드: " << Player->GetGold() << " 골드\n";
-	std::cout << "| 상점 메뉴로 돌아갑니다. \n";
+	Player->GetInventory()[Index] = NewItem;
+
+	std::cout << "| " << AvailableItems[Index]->GetName() << " 아이템을(를) 구매했습니다!\n"; DELAY_MILLI(1000);
+	std::cout << "| 남은 골드: " << Player->GetGold() << " 골드\n"; DELAY_MILLI(1000);
+	std::cout << "| 상점 메뉴로 돌아갑니다. \n"; DELAY_MILLI(1000);
 }
 
 void Shop::SellItem(int Index, Character* Player)
@@ -170,22 +200,22 @@ void Shop::SellItem(int Index, Character* Player)
 	std::vector<Item*>& Inventory = Player->GetInventory();
 
 	// 유효하지 않은 인덱스 체크
-	if (Index < 0 || Index >= Inventory.size())
+	if (Index < 0 || Index >= Inventory.size() || false == Player->IsExistInInventory(Index))
 	{
 		std::cout << "|유효하지 않은 아이템 번호입니다! 다시 선택해주세요.\n\n";
 		return;
 	}
 
 	// 판매 아이템 처리
-	Item* itemToSell = Inventory[Index];
+	std::string itemToSell = Inventory[Index]->GetName();
 	int sellPrice = static_cast<int>(ItemPrices[Index] * 0.6);
 
 	// 골드 추가 및 아이템 제거
 	Player->SetGold(Player->GetGold() + sellPrice);
-	Inventory.erase(Inventory.begin() + Index);
+	delete Inventory[Index];
+	Inventory[Index] = nullptr;
 
-	std::cout << "| " << itemToSell->GetName() << "을(를) " << sellPrice << " 골드에 판매했습니다!\n";
-	delete itemToSell; // 메모리 해제
+	std::cout << "| " << itemToSell << "을(를) " << sellPrice << " 골드에 판매했습니다!\n";
 
 	std::cout << "| 상점 메뉴로 돌아갑니다.\n";
 }
