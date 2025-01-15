@@ -216,7 +216,8 @@ void Shop::SellItem(int Index, Character* Player)
 	delete Inventory[Index];
 	Inventory[Index] = nullptr;
 
-	std::cout << "| " << itemToSell << "을(를) " << sellPrice << " 골드에 판매했습니다!\n";
-
-	std::cout << "| 상점 메뉴로 돌아갑니다.\n";
+	std::cout << "| " << itemToSell << "을(를) " << sellPrice << " 골드에 판매했습니다!\n"; DELAY_MILLI(1000);
+	std::cout << "| 남은 골드: " << Player->GetGold() << " 골드\n"; DELAY_MILLI(1000);
+	std::cout << "| 상점 메뉴로 돌아갑니다. \n"; DELAY_MILLI(1000);
+	
 }
