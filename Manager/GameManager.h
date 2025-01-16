@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <atomic>
 #include <string>
 #include <thread> // EndCredits에서 sleep_for 사용
 #include <chrono> // EndCredits에서 시간 관련 기능
@@ -89,8 +90,13 @@ public:
 	void StartMusic(); // BGM 시작
 
 private:
+	std::shared_ptr<std::thread> musicThread;
+	std::atomic<bool> stopMusicThread{false};
+
+private:
     void Init();
 	void PlayMusic(); // BGM 재생
+	void StopMusic();
 /* 캐릭터 생성 */
 	void CreateCharacter();
 
@@ -141,5 +147,5 @@ private:
 
 /* 진행 관련 */
 public:
-	void WaitAnyKeyPressed();
+	void WaitEnterKeyPressed();
 };

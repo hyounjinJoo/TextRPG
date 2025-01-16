@@ -3,7 +3,7 @@
 
 Character* Character::Instance = nullptr;
 
-Character::Character(std::string Name) : Name(Name), Level(1), Health(0), MaxHealth(200), Attack(3000), Experience(0), Gold(0)
+Character::Character(std::string Name) : Name(Name), Level(1), Health(0), MaxHealth(200), Attack(10), Experience(0), Gold(0)
 {
     Health = MaxHealth;
     Inventory.resize(2);
@@ -41,8 +41,9 @@ void Character::LevelUp()                                                       
     {
         Instance->SetLevel(Instance->GetLevel() + 1);
         Instance->SetMaxHealth((Instance->GetLevel() * 20) + Instance->GetMaxHealth());                 // 현재 체력 + (레벨 * 20)
-        Instance->SetAttack((Instance->GetLevel() * 5) + Instance->GetAttack());                        // 현재 공격력 + (레벨 * 5)
-        Instance->SetHealth(Instance->GetMaxHealth());                                                  // 체력 회복
+        Instance->SetAttack(Instance->GetLevel() + Instance->GetAttack());                        // 현재 공격력 + (레벨 * 5)
+        int Heal = 40;
+    	Instance->SetHealth(Health + (Heal * Level) > MaxHealth ? MaxHealth : Health + (Heal * Level));                                                  // 체력 회복
     }
 }
 

@@ -20,13 +20,13 @@ BossMonster::BossMonster(int Level) : Name("투명드래곤") // 투명드래곤
     // 레벨에 따라 체력과 공격력을 랜덤하게 설정.
     random_device R;
     mt19937 Gen(R());
-    uniform_int_distribution<int> DistHealth(30, 45); // 보스 몬스터의 체력은 기존 몬스터의 1.5배 범위를 랜덤으로 설정.
-    uniform_int_distribution<int> DistAttack(75, 150); // 보스 몬스터의 공격력은 기존 몬스터의 1.5배 범위를 랜덤으로 설정.
+    uniform_int_distribution<int> DistHealth(75, 100); // 보스 몬스터의 체력은 기존 몬스터의 1.5배 범위를 랜덤으로 설정.
+    uniform_int_distribution<int> DistAttack(130, 180); // 보스 몬스터의 공격력은 기존 몬스터의 1.5배 범위를 랜덤으로 설정.
     int RandomHealth = DistHealth(Gen);
-    int RandomAttack = static_cast<int>(DistAttack(Gen) * 0.1);
+    int RandomAttack = DistAttack(Gen);
 
     Health = Level * RandomHealth;
-    Attack = Level * RandomAttack;
+    Attack = RandomAttack;
 
 
     // 투명드래곤 생성시 출력되는 메시지.
